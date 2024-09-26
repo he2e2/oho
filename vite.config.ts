@@ -1,17 +1,18 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import eslintPlugin from "vite-plugin-eslint";
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), eslintPlugin()],
+  plugins: [react()],
   server: {
     port: 3000,
     proxy: {
-      "/oho": {
-        target: import.meta.env.VITE_API_URL,
+      '/oho': {
+        target:
+          process.env.VITE_API_URL ||
+          'http://apis.data.go.kr/B551011/KorService1',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/oho/, ""),
+        rewrite: (path) => path.replace(/^\/oho/, ''),
       },
     },
   },
