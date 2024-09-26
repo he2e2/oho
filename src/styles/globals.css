@@ -24,6 +24,7 @@ body {
   height: 100%;
 
   margin: auto;
+  background: #e3e3e3;
 }
 
 ul {
@@ -41,17 +42,17 @@ button {
   border: none;
 }
 
-.root {
+#root {
   width: 100%;
   height: 100%;
   min-width: 375px;
 
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  align-items: center;
 }
 
 .mw {
   max-width: 90rem;
-  with: 100%;
+  width: 100%;
 }
