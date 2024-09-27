@@ -20,7 +20,6 @@ const styles = {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
-    border: 1px solid red;
   `,
 
   logo: styled.h1`
