@@ -1,8 +1,23 @@
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-createRoot(document.getElementById('root')!).render(
+import { Layout } from '@/components/layout';
+import { MainPage } from '@/pages';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [{ path: '/', element: <MainPage /> }],
+  },
+]);
+
+const App = () => {
+  return <RouterProvider router={router} />;
+};
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
   </StrictMode>,
