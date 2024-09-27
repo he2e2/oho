@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Layout } from '@/components/layout';
+import { MainPage } from '@/pages';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
-    children: [],
+    children: [{ path: '/', element: <MainPage /> }],
   },
 ]);
 

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export function Header() {
   return (
-    <styles.wrapper className='mw'>
+    <styles.wrapper>
       <styles.logo />
       <styles.navBar>
         <span>행사</span>
@@ -15,11 +15,15 @@ export function Header() {
 }
 
 const styles = {
-  wrapper: styled.section`
+  wrapper: styled.header`
+    width: 100%;
+    max-width: 90rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
+    position: absolute;
+    top: 0;
   `,
 
   logo: styled.h1`

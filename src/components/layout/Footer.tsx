@@ -10,11 +10,11 @@ export function Footer() {
 }
 
 const styles = {
-  wrapper: styled.div`
+  wrapper: styled.footer`
     width: 100%;
     display: flex;
     justify-content: center;
-    padding: 1rem;
+    padding: 0.5rem;
     gap: 1rem;
     align-items: center;
 
