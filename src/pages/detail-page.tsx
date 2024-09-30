@@ -122,6 +122,11 @@ const styles = {
     justify-content: center;
     align-items: center;
     gap: 3rem;
+
+    @media (max-width: 768px) {
+      padding: 5rem 0.5rem;
+      gap: 1.5rem;
+    }
   `,
 
   prev: styled.div`
@@ -129,15 +134,18 @@ const styles = {
     display: flex;
     gap: 0.8rem;
     align-items: center;
+    font-size: 1rem;
+
+    @media (max-width: 768px) {
+      font-size: 0.875rem;
+    }
 
     .fa-chevron-left {
-      font-size: 1rem;
       color: #505050;
     }
 
     span {
       color: #000;
-      font-size: 1rem;
       font-style: normal;
       font-weight: 400;
       line-height: normal;
@@ -153,12 +161,20 @@ const styles = {
     gap: 0.75rem;
     margin-bottom: 5rem;
 
+    @media (max-width: 768px) {
+      margin-bottom: 2rem;
+    }
+
     h2 {
       color: #000;
       font-size: 2.5rem;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+
+      @media (max-width: 768px) {
+        font-size: 1.25rem;
+      }
     }
 
     .addr {
@@ -167,6 +183,10 @@ const styles = {
       font-style: normal;
       font-weight: 400;
       line-height: normal;
+
+      @media (max-width: 768px) {
+        font-size: 0.75rem;
+      }
     }
   `,
 
@@ -175,11 +195,23 @@ const styles = {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: start;
+    }
 
     img {
-      width: 30%;
+      min-width: 20rem;
+      flex: 1;
       object-fit: content;
       border-radius: 1.25rem;
+
+      @media (max-width: 768px) {
+        width: 100%;
+        min-width: 100%;
+      }
     }
   `,
 
