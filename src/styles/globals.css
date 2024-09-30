@@ -14,8 +14,6 @@ html {
 body {
   width: 100%;
   height: 100%;
-
-  margin: auto;
 }
 
 ul {
@@ -54,11 +52,12 @@ button {
   flex-direction: column;
   align-items: center;
   position: relative;
+  overflow-x: hidden;
 }
 
 main {
   width: 100%;
-  height: 100%;
+  flex: 1;
   display: flex;
   justify-content: center;
 }
@@ -67,4 +66,5 @@ main {
   max-width: 90rem;
   width: 100%;
   height: 100%;
+  padding: 0 0.5rem;
 }

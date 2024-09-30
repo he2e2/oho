@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useLocation } from 'react-router-dom';
 
-import { SearchBar } from '@/components';
+import { SearchBar, CustomButton, LikeButton } from '@/components';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -50,9 +50,53 @@ function ListSection() {
   return (
     <styles.listWrapper>
       <styles.listContainer className='mw'>
-        <SearchBar type='행사' />
+        <styles.searchSection>
+          <span>
+            <span className='bold'>속초시</span>의{' '}
+            <span className='bold'>‘한옥’</span>에 대한 검색 결과입니다.
+          </span>
+          <SearchBar type='행사' />
+        </styles.searchSection>
+        <styles.listSection></styles.listSection>
       </styles.listContainer>
     </styles.listWrapper>
+  );
+}
+
+interface Item {
+  name: string;
+  addr: string;
+  description: string;
+  like: boolean;
+  dDay?: string;
+  additional?: string;
+}
+
+function ListItem({ name, addr, description, like, dDay, additional }: Item) {
+  return (
+    <styles.listItem>
+      <img src='/no-image.png' alt='item-image' />
+      <styles.contents>
+        <div className='withoutDescription'>
+          <div
+            style={{ gap: '0.3rem', display: 'flex', flexDirection: 'column' }}
+          >
+            <h3>{name}</h3>
+            {additional && <p className='additional'>{additional}</p>}
+            <p className='addr'>{addr}</p>
+          </div>
+          <div
+            className='buttons'
+            style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}
+          >
+            <LikeButton like={like} />
+            <CustomButton name='상세보기' type='button' />
+            {dDay && <CustomButton name={dDay} type='d-day' />}
+          </div>
+        </div>
+        <span className='description'>{description}</span>
+      </styles.contents>
+    </styles.listItem>
   );
 }
 
@@ -118,5 +162,91 @@ const styles = {
   listContainer: styled.div`
     display: flex;
     flex-direction: column;
+    gap: 4rem;
+  `,
+
+  searchSection: styled.div`
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 1.75rem;
+
+    span {
+      color: #000;
+      font-size: 1.5rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    .bold {
+      font-weight: 600;
+    }
+  `,
+
+  listSection: styled.ul`
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  `,
+
+  listItem: styled.li`
+    display: flex;
+    gap: 2.55rem;
+    align-items: center;
+    cursor: pointer;
+
+    img {
+      width: 16.5rem;
+      object-fit: content;
+      border-radius: 8px;
+    }
+  `,
+
+  contents: styled.section`
+    display: flex;
+    flex: 1;
+    height: 100%;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem 0;
+
+    .withoutDescription {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    h3 {
+      color: #000;
+      font-size: 1.25rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    .addr {
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 0.875rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    .description {
+      flex: 1;
+      color: #626262;
+      font-size: 0.75rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    .additional {
+      color: rgba(0, 0, 0, 0.65);
+      font-size: 0.875rem;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
   `,
 };

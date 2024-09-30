@@ -39,7 +39,7 @@ const styles = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    padding: 1rem 0.5rem;
     position: absolute;
     top: 0;
     z-index: 1000;
