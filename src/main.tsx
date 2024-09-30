@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Layout } from '@/components/layout';
-import { MainPage, ListPage } from '@/pages';
+import { MainPage, ListPage, DetailPage } from '@/pages';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +14,7 @@ const router = createBrowserRouter([
       { path: '/festival', element: <ListPage /> },
       { path: '/lodgement', element: <ListPage /> },
       { path: '/tour', element: <ListPage /> },
+      { path: '/detail/:id', element: <DetailPage /> },
     ],
   },
 ]);

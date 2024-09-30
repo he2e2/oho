@@ -1,8 +1,16 @@
 import styled from '@emotion/styled';
 
-export function LikeButton({ like }: { like: boolean }) {
+export function LikeButton({
+  like,
+  position,
+}: {
+  like: boolean;
+  position?: string;
+}) {
   return (
-    <styles.container>{like ? <Heart /> : <EmptyHeart />}</styles.container>
+    <styles.container $position={position}>
+      {like ? <Heart /> : <EmptyHeart />}
+    </styles.container>
   );
 }
 
@@ -41,8 +49,12 @@ function Heart() {
   );
 }
 
+interface LikeButton {
+  $position?: string;
+}
+
 const styles = {
-  container: styled.div`
+  container: styled.div<LikeButton>`
     width: 2.375rem;
     height: 2.375rem;
     border-radius: 50%;
@@ -51,5 +63,8 @@ const styles = {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: ${(props) => (props.$position ? props.$position : 'relative')};
+    right: 0;
+    top: 0;
   `,
 };

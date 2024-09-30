@@ -129,12 +129,13 @@ const styles = {
       width: 100%;
       height: 100%;
       background: inherit;
-      filter: blur(3px);
+      filter: blur(5px);
       z-index: 2;
     }
 
     h2 {
       color: #fff;
+      text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
       font-size: 2.5rem;
       font-style: normal;
       font-weight: 800;
