@@ -34,6 +34,10 @@ const styles = {
       font-style: normal;
       font-weight: 600;
       padding: 0.8rem 2rem;
+
+      @media (max-width: 768px) {
+        padding: 0.4rem 1rem;
+      }
     }
   `,
 };

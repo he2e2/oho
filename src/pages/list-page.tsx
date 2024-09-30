@@ -72,7 +72,14 @@ interface Item {
   additional?: string;
 }
 
-function ListItem({ name, addr, description, like, dDay, additional }: Item) {
+function ListItem({
+  name = '정광원 광장농원',
+  addr = '서울시 노원구',
+  description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores eaque sapiente voluptate aliquam! Praesentium debiti',
+  like = true,
+  dDay = 'D-23',
+  additional,
+}: Item) {
   return (
     <styles.listItem>
       <img src='/no-image.png' alt='item-image' />
@@ -121,6 +128,10 @@ const styles = {
     position: relative;
     flex-direction: column;
 
+    @media (max-width: 768px) {
+      padding: 6rem 0 5rem 0;
+    }
+
     ::before {
       content: '';
       position: absolute;
@@ -141,6 +152,10 @@ const styles = {
       font-weight: 800;
       line-height: normal;
       z-index: 5;
+
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
     }
 
     .eng {
@@ -150,6 +165,10 @@ const styles = {
       font-weight: 500;
       line-height: normal;
       z-index: 5;
+
+      @media (max-width: 768px) {
+        font-size: 1rem;
+      }
     }
   `,
 
@@ -158,6 +177,10 @@ const styles = {
     padding: 7rem 0;
     display: flex;
     justify-content: center;
+
+    @media (max-width: 768px) {
+      padding: 3rem 0;
+    }
   `,
 
   listContainer: styled.div`
@@ -178,6 +201,10 @@ const styles = {
       font-style: normal;
       font-weight: 400;
       line-height: normal;
+
+      @media (max-width: 768px) {
+        font-size: 1rem;
+      }
     }
 
     .bold {
@@ -189,6 +216,16 @@ const styles = {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
+
+    @media (max-width: 768px) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
   `,
 
   listItem: styled.li`
@@ -197,10 +234,19 @@ const styles = {
     align-items: center;
     cursor: pointer;
 
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
     img {
       width: 16.5rem;
       object-fit: content;
       border-radius: 8px;
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
     }
   `,
 
@@ -214,7 +260,13 @@ const styles = {
 
     .withoutDescription {
       display: flex;
+      align-items: start;
       justify-content: space-between;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
     }
 
     h3 {
