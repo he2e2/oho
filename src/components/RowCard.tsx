@@ -15,7 +15,7 @@ export function RowCard({
     <styles.wrapper>
       <styles.image src={imageUrl} alt='card-image' />
       <styles.contents>
-        <h3>{name}</h3>
+        <h4>{name}</h4>
         <span className='date'>{date}</span>
         <span className='addr'>{addr}</span>
       </styles.contents>
@@ -25,9 +25,9 @@ export function RowCard({
 
 const styles = {
   wrapper: styled.section`
-    padding: 1.63rem 2.5rem;
+    padding: 1.63rem 2rem;
     display: flex;
-    gap: 2.25rem;
+    gap: 1.5rem;
     width: 20rem;
     border-radius: 20px;
     background: #fff;
@@ -38,6 +38,7 @@ const styles = {
   image: styled.img`
     width: 5.75rem;
     height: 5.75rem;
+    border-radius: 50%;
     object-fit: content;
   `,
 
@@ -50,9 +51,9 @@ const styles = {
     font-style: normal;
     line-height: normal;
 
-    h3 {
+    h4 {
       color: #000;
-      font-size: 1.25rem;
+      font-size: 1rem;
       font-weight: 700;
     }
 
