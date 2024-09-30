@@ -120,7 +120,9 @@ const styles = {
     .selector-wrapper {
       display: flex;
       padding: 1.125rem;
-      width: 10rem;
+      max-width: 10rem;
+      width: 20%;
+      min-width: 6rem;
       border-radius: 8px;
       border: ${(props) =>
         props.$pathname === '/'
@@ -128,6 +130,10 @@ const styles = {
           : '1px solid rgba(136, 136, 136, 0.34)'};
       align-items: center;
       position: relative;
+
+      @media (max-width: 768px) {
+        padding: 0.8rem;
+      }
     }
   `,
 
@@ -156,6 +162,10 @@ const styles = {
     display: flex;
     gap: 1rem;
 
+    @media (max-width: 768px) {
+      padding: 0.875rem 1rem 0.875rem 1.3rem;
+    }
+
     input {
       flex: 1;
       color: ${(props) => (props.$pathname === '/' ? '#fff' : '#000')};
@@ -179,7 +189,7 @@ const styles = {
   `,
 
   dropBoxWrapper: styled.div`
-    width: 10rem;
+    width: 100%;
     height: 10rem;
     padding: 0.8rem;
     background-color: #fff;
@@ -213,6 +223,7 @@ const styles = {
     .option {
       color: #505050;
       cursor: pointer;
+      font-size: 0.8125rem;
     }
   `,
 };

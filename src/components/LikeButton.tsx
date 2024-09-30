@@ -66,5 +66,10 @@ const styles = {
     position: ${(props) => (props.$position ? props.$position : 'relative')};
     right: 0;
     top: 0;
+
+    @media (max-width: 768px) {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
   `,
 };

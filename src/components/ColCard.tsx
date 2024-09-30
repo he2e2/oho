@@ -30,6 +30,12 @@ const styles = {
     gap: 2.75rem;
     transition: transform 0.3s ease-in-out;
     transform-style: preserve-3d;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      padding: 1rem;
+      gap: 1.25rem;
+    }
 
     &:hover {
       transform: translateZ(30px);
@@ -39,6 +45,11 @@ const styles = {
       width: 5.75rem;
       height: 5.75rem;
       object-fit: content;
+
+      @media (max-width: 768px) {
+        width: 3.25rem;
+        height: 3.25rem;
+      }
     }
 
     h3 {
@@ -47,6 +58,10 @@ const styles = {
       font-style: normal;
       font-weight: 600;
       line-height: normal;
+
+      @media (max-width: 768px) {
+        font-size: 0.875rem;
+      }
     }
   `,
 };

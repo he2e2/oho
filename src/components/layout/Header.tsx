@@ -71,5 +71,9 @@ const styles = {
     font-weight: 500;
     line-height: normal;
     cursor: pointer;
+
+    @media (max-width: 768px) {
+      font-size: 0.875rem;
+    }
   `,
 };
