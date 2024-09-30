@@ -132,6 +132,7 @@ const styles = {
     font-weight: 600;
     line-height: normal;
     padding: 0.56rem;
+    cursor: pointer;
 
     &::after {
       content: '';

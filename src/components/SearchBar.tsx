@@ -90,6 +90,7 @@ const styles = {
     font-style: normal;
     font-weight: 600;
     line-height: 1rem;
+    cursor: pointer;
   `,
 
   inputContainer: styled.div`
@@ -120,6 +121,7 @@ const styles = {
     height: 1.125rem;
     object-fit: content;
     transform: translateY(12%);
+    cursor: pointer;
   `,
 
   dropBoxWrapper: styled.div`
@@ -156,6 +158,7 @@ const styles = {
 
     .option {
       color: #505050;
+      cursor: pointer;
     }
   `,
 };
