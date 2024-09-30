@@ -1,0 +1,134 @@
+import { RowCard } from '@/components';
+import styled from '@emotion/styled';
+
+const dummy = [
+  {
+    imageUrl: '/no-image.png',
+    name: '정광원 관광농원',
+    date: '2024.09.12',
+    addr: '서울시 노원구',
+  },
+  {
+    imageUrl: '/no-image.png',
+    name: '정광원 관광농원',
+    date: '2024.09.12',
+    addr: '서울시 노원구',
+  },
+  {
+    imageUrl: '/no-image.png',
+    name: '정광원 관광농원',
+    date: '2024.09.12',
+    addr: '서울시 노원구',
+  },
+  {
+    imageUrl: '/no-image.png',
+    name: '정광원 관광농원',
+    date: '2024.09.12',
+    addr: '서울시 노원구',
+  },
+  {
+    imageUrl: '/no-image.png',
+    name: '정광원 관광농원',
+    date: '2024.09.12',
+    addr: '서울시 노원구',
+  },
+];
+
+export function MyPage() {
+  return (
+    <styles.wrapper className='mw'>
+      <LikeList type='행사' />
+      <LikeList type='숙소' />
+      <LikeList type='관광지' />
+    </styles.wrapper>
+  );
+}
+
+function LikeList({ type }: { type: string }) {
+  return (
+    <styles.likeList>
+      <h3>내가 찜한 {type} 목록</h3>
+      <div className='cardsWrapper'>
+        <div className='cards'>
+          {dummy.length === 0 ? (
+            <p className='noData'>찜 목록이 없습니다.</p>
+          ) : (
+            dummy.map((item) => (
+              <RowCard
+                key={item.name}
+                name={item.name}
+                addr={item.addr}
+                imageUrl={item.imageUrl}
+                date={item.date}
+              />
+            ))
+          )}
+        </div>
+      </div>
+    </styles.likeList>
+  );
+}
+
+const styles = {
+  wrapper: styled.section`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 8rem 0.5rem;
+    gap: 6rem;
+
+    h2 {
+      color: #000;
+      font-size: 2.5rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  `,
+
+  likeList: styled.section`
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 2.38rem;
+
+    h3 {
+      color: #000;
+      font-size: 1.875rem;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+
+    .cardsWrapper {
+      width: 100%;
+      padding: 1.5rem 1rem;
+      overflow-x: scroll;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+        height: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #d9d9d9;
+        border-radius: 20px;
+      }
+    }
+
+    .cards {
+      display: flex;
+      width: 100%;
+      gap: 1rem;
+    }
+
+    .noData {
+      color: rgba(0, 0, 0, 0.4);
+      font-size: 1.25rem;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+  `,
+};

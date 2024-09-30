@@ -17,6 +17,7 @@ const styles = {
     padding: 0.5rem;
     gap: 1rem;
     align-items: center;
+    background: rgba(217, 217, 217, 0.5);
 
     p {
       color: #a3a3a3;
