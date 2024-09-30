@@ -3,7 +3,7 @@
   padding: 0;
   margin: 0;
   list-style: none;
-  font-family: 'Pretendard Variable';
+  font-family: 'Pretendard Variable', 'Inter', sans-serif;
 }
 
 html {
@@ -14,9 +14,6 @@ html {
 body {
   width: 100%;
   height: 100%;
-
-  margin: auto;
-  background: #e3e3e3;
 }
 
 ul {
@@ -55,11 +52,12 @@ button {
   flex-direction: column;
   align-items: center;
   position: relative;
+  overflow-x: hidden;
 }
 
 main {
   width: 100%;
-  height: 100%;
+  flex: 1;
   display: flex;
   justify-content: center;
 }
@@ -68,4 +66,5 @@ main {
   max-width: 90rem;
   width: 100%;
   height: 100%;
+  padding: 0 0.5rem;
 }
