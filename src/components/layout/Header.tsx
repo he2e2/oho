@@ -1,18 +1,28 @@
 import styled from '@emotion/styled';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 export function Header() {
   const location = useLocation();
   return (
     <styles.wrapper>
-      <styles.logo $pathname={location.pathname} />
+      <Link to={'/'}>
+        <styles.logo $pathname={location.pathname} />
+      </Link>
       <styles.navBar>
-        <styles.navItem $pathname={location.pathname}>행사</styles.navItem>
-        <styles.navItem $pathname={location.pathname}>숙박</styles.navItem>
-        <styles.navItem $pathname={location.pathname}>관광지</styles.navItem>
-        <styles.navItem $pathname={location.pathname}>
-          마이페이지
-        </styles.navItem>
+        <Link to={'/festival'}>
+          <styles.navItem $pathname={location.pathname}>행사</styles.navItem>
+        </Link>
+        <Link to={'/lodgement'}>
+          <styles.navItem $pathname={location.pathname}>숙소</styles.navItem>
+        </Link>
+        <Link to={'/tour'}>
+          <styles.navItem $pathname={location.pathname}>관광지</styles.navItem>
+        </Link>
+        <Link to={'/my'}>
+          <styles.navItem $pathname={location.pathname}>
+            마이페이지
+          </styles.navItem>
+        </Link>
       </styles.navBar>
     </styles.wrapper>
   );
@@ -32,6 +42,7 @@ const styles = {
     padding: 1rem 0;
     position: absolute;
     top: 0;
+    z-index: 1000;
   `,
 
   logo: styled.h1<Logo>`

@@ -3,7 +3,7 @@
   padding: 0;
   margin: 0;
   list-style: none;
-  font-family: 'Pretendard Variable';
+  font-family: 'Pretendard Variable', 'Inter', sans-serif;
 }
 
 html {
@@ -16,7 +16,6 @@ body {
   height: 100%;
 
   margin: auto;
-  background: #e3e3e3;
 }
 
 ul {
