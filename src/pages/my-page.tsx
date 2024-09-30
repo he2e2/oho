@@ -3,30 +3,35 @@ import styled from '@emotion/styled';
 
 const dummy = [
   {
+    id: 1,
     imageUrl: '/no-image.png',
     name: '정광원 관광농원',
     date: '2024.09.12',
     addr: '서울시 노원구',
   },
   {
+    id: 2,
     imageUrl: '/no-image.png',
     name: '정광원 관광농원',
     date: '2024.09.12',
     addr: '서울시 노원구',
   },
   {
+    id: 3,
     imageUrl: '/no-image.png',
     name: '정광원 관광농원',
     date: '2024.09.12',
     addr: '서울시 노원구',
   },
   {
+    id: 4,
     imageUrl: '/no-image.png',
     name: '정광원 관광농원',
     date: '2024.09.12',
     addr: '서울시 노원구',
   },
   {
+    id: 5,
     imageUrl: '/no-image.png',
     name: '정광원 관광농원',
     date: '2024.09.12',
@@ -55,7 +60,7 @@ function LikeList({ type }: { type: string }) {
           ) : (
             dummy.map((item) => (
               <RowCard
-                key={item.name}
+                key={item.id}
                 name={item.name}
                 addr={item.addr}
                 imageUrl={item.imageUrl}
@@ -93,12 +98,20 @@ const styles = {
     flex-direction: column;
     gap: 2.38rem;
 
+    @media (max-width: 768px) {
+      gap: 1rem;
+    }
+
     h3 {
       color: #000;
       font-size: 1.875rem;
       font-style: normal;
       font-weight: 600;
       line-height: normal;
+
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
     }
 
     .cardsWrapper {

@@ -11,9 +11,7 @@ export function MainPage() {
         <SearchSection />
       </styles.background>
       <styles.background $section='bottom'>
-        <styles.container className='mw'>
-          <LegionListSection />
-        </styles.container>
+        <LegionListSection />
       </styles.background>
     </styles.wrapper>
   );
@@ -109,12 +107,20 @@ const styles = {
     align-items: center;
     gap: 2.5rem;
 
+    @media (max-width: 768px) {
+      gap: 1.25rem;
+    }
+
     h2 {
       text-align: center;
       font-size: 2rem;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+
+      @media (max-width: 768px) {
+        font-size: 1.25rem;
+      }
     }
   `,
 
@@ -134,6 +140,10 @@ const styles = {
     padding: 0.56rem;
     cursor: pointer;
 
+    @media (max-width: 768px) {
+      font-size: 0.875rem;
+    }
+
     &::after {
       content: '';
       position: absolute;
@@ -148,6 +158,25 @@ const styles = {
 
   areaList: styled.div`
     display: flex;
+    width: 100%;
+    justify-content: center;
     gap: 1rem;
+    padding: 1rem;
+
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #d9d9d9;
+      border-radius: 20px;
+    }
+
+    @media (max-width: 768px) {
+      justify-content: start;
+    }
   `,
 };

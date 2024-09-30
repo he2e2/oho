@@ -33,6 +33,11 @@ const styles = {
     background: #fff;
     box-shadow: 4px 4px 14.2px 0px rgba(0, 0, 0, 0.16);
     align-items: center;
+
+    @media (max-width: 768px) {
+      padding: 0.8rem 1rem;
+      gap: 0.75rem;
+    }
   `,
 
   image: styled.img`
@@ -40,6 +45,11 @@ const styles = {
     height: 5.75rem;
     border-radius: 50%;
     object-fit: content;
+
+    @media (max-width: 768px) {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
   `,
 
   contents: styled.div`
@@ -55,12 +65,20 @@ const styles = {
       color: #000;
       font-size: 1rem;
       font-weight: 700;
+
+      @media (max-width: 768px) {
+        font-size: 0.875rem;
+      }
     }
 
     .date {
       color: rgba(0, 0, 0, 0.65);
       font-size: 0.875rem;
       font-weight: 500;
+
+      @media (max-width: 768px) {
+        font-size: 0.75rem;
+      }
     }
 
     .addr {
@@ -68,6 +86,10 @@ const styles = {
       font-size: 0.75rem;
       font-weight: 400;
       flex: 1;
+
+      @media (max-width: 768px) {
+        font-size: 0.5rem;
+      }
     }
   `,
 };

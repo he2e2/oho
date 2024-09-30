@@ -27,7 +27,10 @@ const styles = {
       font-size: 1rem;
       font-style: normal;
       font-weight: 400;
-      line-height: 2.625rem;
+
+      @media (max-width: 768px) {
+        font-size: 0.75rem;
+      }
     }
 
     img {
