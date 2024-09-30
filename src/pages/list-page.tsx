@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import { useLocation } from 'react-router-dom';
 
+import { SearchBar } from '@/components';
+
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
   { ko: string; en: string }
@@ -23,6 +25,7 @@ export function ListPage() {
   return (
     <styles.wrapper>
       <Header />
+      <ListSection />
     </styles.wrapper>
   );
 }
@@ -40,6 +43,16 @@ function Header() {
       <h2>{headerData.ko}</h2>
       <span className='eng'>{headerData.en}</span>
     </styles.listHeader>
+  );
+}
+
+function ListSection() {
+  return (
+    <styles.listWrapper>
+      <styles.listContainer className='mw'>
+        <SearchBar type='행사' />
+      </styles.listContainer>
+    </styles.listWrapper>
   );
 }
 
@@ -93,5 +106,17 @@ const styles = {
       line-height: normal;
       z-index: 5;
     }
+  `,
+
+  listWrapper: styled.div`
+    flex: 1 0 0;
+    padding: 7rem 0;
+    display: flex;
+    justify-content: center;
+  `,
+
+  listContainer: styled.div`
+    display: flex;
+    flex-direction: column;
   `,
 };
