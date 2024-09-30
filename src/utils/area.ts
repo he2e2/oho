@@ -17,3 +17,12 @@ export const area = [
   { code: '38', name: '전라남도' },
   { code: '39', name: '제주도' },
 ];
+
+export const areaImageMap = [
+  { imageUrl: '/area/seoul.png', name: '서울' },
+  { imageUrl: '/area/yeosu.png', name: '여수' },
+  { imageUrl: '/area/pusan.png', name: '부산' },
+  { imageUrl: '/area/sokcho.png', name: '속초' },
+  { imageUrl: '/area/Gangneung.png', name: '강릉' },
+  { imageUrl: '/area/jeju.png', name: '제주' },
+];

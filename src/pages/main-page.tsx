@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
-
-import { SearchBar } from '@/components';
 import { useState } from 'react';
+
+import { SearchBar, ColCard } from '@/components';
+import { areaImageMap } from '@/utils';
 
 export function MainPage() {
   return (
@@ -67,6 +68,17 @@ function LegionListSection() {
   return (
     <styles.container className='mw'>
       <h2 style={{ color: '#000' }}>인기있는 지역의 행사를 확인해보세요!</h2>
+      <styles.areaList>
+        {areaImageMap.map((area) => {
+          return (
+            <ColCard
+              key={area.name}
+              imageUrl={area.imageUrl}
+              name={area.name}
+            />
+          );
+        })}
+      </styles.areaList>
     </styles.container>
   );
 }
@@ -131,5 +143,10 @@ const styles = {
       background-color: #fff;
       transition: width 0.3s ease;
     }
+  `,
+
+  areaList: styled.div`
+    display: flex;
+    gap: 1rem;
   `,
 };
