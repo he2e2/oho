@@ -7,10 +7,12 @@ export interface KeywordItem {
 }
 
 export interface GetSearchKeywordDataDTO {
-  header: string;
-  body: {
-    items: {
-      item: KeywordItem[];
+  response: {
+    header: string;
+    body: {
+      items: {
+        item: KeywordItem[];
+      };
     };
   };
 }

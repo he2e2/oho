@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import { SearchBar, CustomButton, LikeButton } from '@/components';
-import { areaMap } from '@/utils';
-import { useSearchData } from '@/api';
+import { areaMap, typeMap } from '@/utils';
+import { useSearchData, type KeywordItem } from '@/api';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -67,9 +67,20 @@ function ListSection({
     areaMap.find((a) => a.code === searchArea)?.name ?? '서울',
   );
 
-  // TODO 지역이 바뀌거나 검색어가 바뀔 때(엔터, 클릭) API 요청
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname.replace(/\//g, '');
 
-  const { data: searchData, refetch: search } = useSearchData(keyword);
+  const { data: searchData, refetch: search } = useSearchData(
+    keyword,
+    areaMap.find((a) => a.name === area)?.code ?? '1',
+    typeMap.find((t) => t.page === pathname)?.id ?? '15',
+    1,
+  );
+
+  useEffect(() => {
+    search();
+  }, [area, keyword]);
 
   return (
     <styles.listWrapper>
@@ -82,56 +93,69 @@ function ListSection({
           <SearchBar
             type='행사'
             area={area}
+            keyword={keyword}
             onAreaChange={setArea}
             onKeywordChange={setKeyword}
             handleSearch={() => {}}
           />
         </styles.searchSection>
-        <styles.listSection></styles.listSection>
+        <styles.listSection>
+          {searchData?.item === undefined ? (
+            <p>검색 결과가 존재하지 않습니다.</p>
+          ) : (
+            searchData?.item.map((item) => {
+              return (
+                <div
+                  onClick={() => {
+                    navigate(`/detail/${item.contentid}`);
+                  }}
+                >
+                  <ListItem
+                    key={item.title}
+                    title={item.title}
+                    addr1={item.addr1}
+                    addr2={item.addr2}
+                    firstimage={item.firstimage}
+                    contentid={item.contentid}
+                  />
+                </div>
+              );
+            })
+          )}
+        </styles.listSection>
       </styles.listContainer>
     </styles.listWrapper>
   );
 }
 
-interface Item {
-  name: string;
-  addr: string;
-  description: string;
-  like: boolean;
-  dDay?: string;
-  additional?: string;
-}
-
-function ListItem({
-  name = '정광원 광장농원',
-  addr = '서울시 노원구',
-  description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores eaque sapiente voluptate aliquam! Praesentium debiti',
-  like = true,
-  dDay = 'D-23',
-  additional,
-}: Item) {
+function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
   return (
     <styles.listItem>
-      <img src='/no-image.png' alt='item-image' />
+      <img
+        src={firstimage === '' ? '/no-image.png' : firstimage}
+        alt='item-image'
+      />
       <styles.contents>
         <div className='withoutDescription'>
           <div
             style={{ gap: '0.3rem', display: 'flex', flexDirection: 'column' }}
           >
-            <h3>{name}</h3>
-            {additional && <p className='additional'>{additional}</p>}
-            <p className='addr'>{addr}</p>
+            <h3>{title}</h3>
+            {/* {additional && <p className='additional'>{additional}</p>} */}
+            <p className='addr'>
+              {addr1} {addr2}
+            </p>
           </div>
           <div
             className='buttons'
             style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}
           >
-            <LikeButton like={like} />
+            <LikeButton like={false} />
             <CustomButton name='상세보기' type='button' />
-            {dDay && <CustomButton name={dDay} type='d-day' />}
+            {/* {dDay && <CustomButton name={dDay} type='d-day' />} */}
           </div>
         </div>
-        <span className='description'>{description}</span>
+        {/* <span className='description'>{description}</span> */}
       </styles.contents>
     </styles.listItem>
   );
@@ -287,7 +311,8 @@ const styles = {
 
     img {
       width: 16.5rem;
-      object-fit: content;
+      height: 12rem;
+      object-fit: cover;
       border-radius: 8px;
 
       @media (max-width: 768px) {
@@ -312,6 +337,7 @@ const styles = {
       @media (max-width: 768px) {
         flex-direction: column;
         gap: 0.5rem;
+        align-items: center;
       }
     }
 

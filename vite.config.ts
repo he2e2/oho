@@ -68,14 +68,14 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
-    proxy: {
-      '/oho': {
-        target:
-          process.env.VITE_API_URL ||
-          'http://apis.data.go.kr/B551011/KorService1',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/oho/, ''),
-      },
-    },
+    // proxy: {
+    //   '/oho': {
+    //     target:
+    //       process.env.VITE_API_URL ||
+    //       'http://apis.data.go.kr/B551011/KorService1',
+    //     changeOrigin: true,
+    //     rewrite: (path) => path.replace(/^\/oho/, ''),
+    //   },
+    // },
   },
 });

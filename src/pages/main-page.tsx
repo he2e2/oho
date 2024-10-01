@@ -24,11 +24,11 @@ interface MenuProps {
 
 function SearchSection() {
   const [menu, setMenu] = useState('행사');
-  const [keyword, setKeyword] = useState('');
+  const [, setKeyword] = useState('');
   const [area, setArea] = useState('서울');
   const navigate = useNavigate();
 
-  const handleSearch = (menu: string) => {
+  const handleSearch = (menu: string, keyword: string) => {
     const queryParams = new URLSearchParams({
       keyword,
       areaCode: areaMap.find((a) => a.name === area)?.code ?? '1',
