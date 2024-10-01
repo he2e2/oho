@@ -1,16 +1,18 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { area } from '@/utils';
+import { areaMap } from '@/utils';
 
 export function SearchBar({
   type,
+  area,
   onKeywordChange,
   onAreaChange,
   handleSearch,
 }: {
   type: string;
+  area: string;
   onKeywordChange: (k: string) => void;
   onAreaChange: (a: string) => void;
   handleSearch: (m: string) => void;
@@ -18,7 +20,11 @@ export function SearchBar({
   const location = useLocation();
   return (
     <styles.wrapper $pathname={location.pathname}>
-      <Selector pathname={location.pathname} onAreaChange={onAreaChange} />
+      <Selector
+        pathname={location.pathname}
+        onAreaChange={onAreaChange}
+        area={area}
+      />
       <InputBar
         type={type}
         pathname={location.pathname}
@@ -31,13 +37,30 @@ export function SearchBar({
 
 function Selector({
   pathname,
+  area,
   onAreaChange,
 }: {
   pathname: string;
+  area: string;
   onAreaChange: (a: string) => void;
 }) {
-  const [area, setArea] = useState('서울');
   const [isDropBoxVisible, setIsDropBoxVisible] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handler = (event: MouseEvent) => {
+      if (
+        containerRef.current !== null &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsDropBoxVisible(false);
+      }
+    };
+    document.addEventListener('click', handler);
+    return () => {
+      document.removeEventListener('click', handler);
+    };
+  }, []);
 
   return (
     <div
@@ -45,9 +68,10 @@ function Selector({
       onClick={() => {
         setIsDropBoxVisible((prev) => !prev);
       }}
+      ref={containerRef}
     >
       <styles.selector $pathname={pathname}>{area}</styles.selector>
-      {isDropBoxVisible && <DropBox onItemClick={setArea} />}
+      {isDropBoxVisible && <DropBox onItemClick={onAreaChange} />}
       <ChevronIcon
         color={
           pathname === '/' ? 'rgba(234, 234, 234, 1)' : 'rgba(136, 136, 136, 1)'
@@ -61,7 +85,7 @@ function DropBox({ onItemClick }: { onItemClick: (area: string) => void }) {
   return (
     <styles.dropBoxWrapper>
       <styles.dropBoxContainer>
-        {area.map((area) => {
+        {areaMap.map((area) => {
           return (
             <span
               key={area.code}

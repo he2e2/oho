@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 
 import { SearchBar, ColCard } from '@/components';
-import { areaImageMap, typeMap } from '@/utils';
+import { areaImageMap, areaMap, typeMap } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 
 export function MainPage() {
@@ -31,10 +31,10 @@ function SearchSection() {
   const handleSearch = (menu: string) => {
     const queryParams = new URLSearchParams({
       keyword,
-      areaCode: area,
+      areaCode: areaMap.find((a) => a.name === area)?.code ?? '1',
     });
     navigate(
-      `/${typeMap.find((area) => area.name === menu)?.page}?${queryParams.toString()}`,
+      `/${typeMap.find((type) => type.name === menu)?.page}?${queryParams.toString()}`,
     );
   };
 
@@ -73,6 +73,7 @@ function SearchSection() {
       </styles.tabMenuCon>
       <SearchBar
         type={menu}
+        area={area}
         onKeywordChange={setKeyword}
         onAreaChange={setArea}
         handleSearch={handleSearch}
@@ -100,7 +101,7 @@ function LegionListSection() {
           return (
             <button
               type='button'
-              key={area.code}
+              key={area.name}
               onClick={() => {
                 handleSearch(area.code, area.sigungu);
               }}

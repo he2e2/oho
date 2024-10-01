@@ -1,4 +1,4 @@
-export const area = [
+export const areaMap = [
   { code: '1', name: '서울' },
   { code: '2', name: '인천' },
   { code: '3', name: '대전' },
