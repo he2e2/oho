@@ -103,7 +103,7 @@ function LegionListSection() {
               type='button'
               key={area.name}
               onClick={() => {
-                handleSearch(area.code, area.sigungu);
+                handleSearch(area.code, area.name);
               }}
             >
               <ColCard imageUrl={area.imageUrl} name={area.name} />

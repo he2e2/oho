@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { SearchBar, CustomButton, LikeButton } from '@/components';
 import { areaMap, typeMap } from '@/utils';
-import { useSearchData, type KeywordItem } from '@/api';
+import { useSearchData, useSearchFestival, type KeywordItem } from '@/api';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -32,7 +32,8 @@ export function ListPage() {
       <Header />
       <ListSection
         searchKeyword={searchParams.get('keyword') ?? ''}
-        searchArea={searchParams.get('areaCode') ?? '서울'}
+        searchArea={searchParams.get('areaCode') ?? '1'}
+        searchCard={searchParams.get('sigunguCode')}
       />
     </styles.wrapper>
   );
@@ -58,20 +59,22 @@ function Header() {
 function ListSection({
   searchKeyword,
   searchArea,
+  searchCard,
 }: {
   searchKeyword: string;
   searchArea: string;
+  searchCard?: string | null;
 }) {
-  const [keyword, setKeyword] = useState(searchKeyword);
+  const [keyword, setKeyword] = useState(
+    searchCard != null ? searchCard : searchKeyword,
+  );
   const [area, setArea] = useState(
     areaMap.find((a) => a.code === searchArea)?.name ?? '서울',
   );
-
-  const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname.replace(/\//g, '');
 
-  const { data: searchData, refetch: search } = useSearchData(
+  const { data: searchKeywordData, refetch: search } = useSearchData(
     keyword,
     areaMap.find((a) => a.name === area)?.code ?? '1',
     typeMap.find((t) => t.page === pathname)?.id ?? '15',
@@ -79,7 +82,7 @@ function ListSection({
   );
 
   useEffect(() => {
-    search();
+    if (keyword !== '') search();
   }, [area, keyword]);
 
   return (
@@ -87,8 +90,13 @@ function ListSection({
       <styles.listContainer className='mw'>
         <styles.searchSection>
           <span>
-            <span className='bold'>{area}</span>의{' '}
-            <span className='bold'>‘{keyword}’</span>에 대한 검색 결과입니다.
+            <span className='bold'>{area}</span>
+            {keyword !== '' && (
+              <>
+                의 <span className='bold'>‘{keyword}’</span>
+              </>
+            )}
+            에 대한 검색 결과입니다.
           </span>
           <SearchBar
             type='행사'
@@ -96,29 +104,22 @@ function ListSection({
             keyword={keyword}
             onAreaChange={setArea}
             onKeywordChange={setKeyword}
-            handleSearch={() => {}}
           />
         </styles.searchSection>
         <styles.listSection>
-          {searchData?.item === undefined ? (
+          {searchKeywordData?.item === undefined ? (
             <p>검색 결과가 존재하지 않습니다.</p>
           ) : (
-            searchData?.item.map((item) => {
+            searchKeywordData?.item.map((item) => {
               return (
-                <div
-                  onClick={() => {
-                    navigate(`/detail/${item.contentid}`);
-                  }}
-                >
-                  <ListItem
-                    key={item.title}
-                    title={item.title}
-                    addr1={item.addr1}
-                    addr2={item.addr2}
-                    firstimage={item.firstimage}
-                    contentid={item.contentid}
-                  />
-                </div>
+                <ListItem
+                  key={item.title}
+                  title={item.title}
+                  addr1={item.addr1}
+                  addr2={item.addr2}
+                  firstimage={item.firstimage}
+                  contentid={item.contentid}
+                />
               );
             })
           )}
@@ -129,8 +130,13 @@ function ListSection({
 }
 
 function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
+  const navigate = useNavigate();
   return (
-    <styles.listItem>
+    <styles.listItem
+      onClick={() => {
+        navigate(`/detail/${contentid}`);
+      }}
+    >
       <img
         src={firstimage === '' ? '/no-image.png' : firstimage}
         alt='item-image'

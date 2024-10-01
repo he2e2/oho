@@ -48,34 +48,25 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        runtimeCaching: [
-          {
-            urlPattern:
-              /^http:\/\/apis\.data\.go\.kr\/B551011\/KorService1\/.*$/,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'public-api-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24,
-              },
-            },
-          },
-        ],
-      },
+      // workbox: {
+      //   runtimeCaching: [
+      //     {
+      //       urlPattern:
+      //         /^http:\/\/apis\.data\.go\.kr\/B551011\/KorService1\/.*$/,
+      //       handler: 'NetworkFirst',
+      //       options: {
+      //         cacheName: 'public-api-cache',
+      //         expiration: {
+      //           maxEntries: 50,
+      //           maxAgeSeconds: 60 * 60 * 24,
+      //         },
+      //       },
+      //     },
+      //   ],
+      // },
     }),
   ],
   server: {
     port: 3000,
-    // proxy: {
-    //   '/oho': {
-    //     target:
-    //       process.env.VITE_API_URL ||
-    //       'http://apis.data.go.kr/B551011/KorService1',
-    //     changeOrigin: true,
-    //     rewrite: (path) => path.replace(/^\/oho/, ''),
-    //   },
-    // },
   },
 });
