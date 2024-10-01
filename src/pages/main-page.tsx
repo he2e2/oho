@@ -31,7 +31,7 @@ function SearchSection() {
   const handleSearch = (menu: string) => {
     const queryParams = new URLSearchParams({
       keyword,
-      area,
+      areaCode: area,
     });
     navigate(
       `/${typeMap.find((area) => area.name === menu)?.page}?${queryParams.toString()}`,
@@ -82,12 +82,15 @@ function SearchSection() {
 }
 
 function LegionListSection() {
-  /*
-  TODO
-  contentTypeId : 15
-  areaCode : 각 area.code
-  sigunguCode: 있으면 area.sigungu
-  */
+  const navigate = useNavigate();
+
+  const handleSearch = (area: string, sigungu?: string) => {
+    const queryParams = new URLSearchParams({
+      areaCode: area,
+      sigunguCode: sigungu ?? '',
+    });
+    navigate(`/festival?${queryParams.toString()}`);
+  };
 
   return (
     <styles.container className='mw'>
@@ -95,11 +98,15 @@ function LegionListSection() {
       <styles.areaList>
         {areaImageMap.map((area) => {
           return (
-            <ColCard
-              key={area.name}
-              imageUrl={area.imageUrl}
-              name={area.name}
-            />
+            <button
+              type='button'
+              key={area.code}
+              onClick={() => {
+                handleSearch(area.code, area.sigungu);
+              }}
+            >
+              <ColCard imageUrl={area.imageUrl} name={area.name} />
+            </button>
           );
         })}
       </styles.areaList>
