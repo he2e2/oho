@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
+import { useSearchData, type KeywordItem } from '@/api';
 import { SearchBar, CustomButton, LikeButton } from '@/components';
 import { areaMap, typeMap } from '@/utils';
-import { useSearchData, useSearchFestival, type KeywordItem } from '@/api';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
