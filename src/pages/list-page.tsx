@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 
 import { SearchBar, CustomButton, LikeButton } from '@/components';
+import { areaMap } from '@/utils';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -22,10 +24,14 @@ const headerMap: Record<
 };
 
 export function ListPage() {
+  const [searchParams] = useSearchParams();
   return (
     <styles.wrapper>
       <Header />
-      <ListSection />
+      <ListSection
+        searchKeyword={searchParams.get('keyword') ?? ''}
+        searchArea={searchParams.get('areaCode') ?? '서울'}
+      />
     </styles.wrapper>
   );
 }
@@ -46,20 +52,33 @@ function Header() {
   );
 }
 
-function ListSection() {
+function ListSection({
+  searchKeyword,
+  searchArea,
+}: {
+  searchKeyword: string;
+  searchArea: string;
+}) {
+  const [keyword, setKeyword] = useState(searchKeyword);
+  const [area, setArea] = useState(
+    areaMap.find((a) => a.code === searchArea)?.name ?? '서울',
+  );
+
+  // TODO 지역이 바뀌거나 검색어가 바뀔 때(엔터, 클릭) API 요청
+
   return (
     <styles.listWrapper>
       <styles.listContainer className='mw'>
         <styles.searchSection>
           <span>
-            <span className='bold'>속초시</span>의{' '}
-            <span className='bold'>‘한옥’</span>에 대한 검색 결과입니다.
+            <span className='bold'>{area}</span>의{' '}
+            <span className='bold'>‘{keyword}’</span>에 대한 검색 결과입니다.
           </span>
           <SearchBar
             type='행사'
-            area=''
-            onAreaChange={() => {}}
-            onKeywordChange={() => {}}
+            area={area}
+            onAreaChange={setArea}
+            onKeywordChange={setKeyword}
             handleSearch={() => {}}
           />
         </styles.searchSection>
