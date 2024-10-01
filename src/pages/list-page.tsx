@@ -55,7 +55,13 @@ function ListSection() {
             <span className='bold'>속초시</span>의{' '}
             <span className='bold'>‘한옥’</span>에 대한 검색 결과입니다.
           </span>
-          <SearchBar type='행사' />
+          <SearchBar
+            type='행사'
+            area=''
+            onAreaChange={() => {}}
+            onKeywordChange={() => {}}
+            handleSearch={() => {}}
+          />
         </styles.searchSection>
         <styles.listSection></styles.listSection>
       </styles.listContainer>

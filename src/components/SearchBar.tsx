@@ -1,22 +1,66 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { area } from '@/utils';
+import { areaMap } from '@/utils';
 
-export function SearchBar({ type }: { type: string }) {
+export function SearchBar({
+  type,
+  area,
+  onKeywordChange,
+  onAreaChange,
+  handleSearch,
+}: {
+  type: string;
+  area: string;
+  onKeywordChange: (k: string) => void;
+  onAreaChange: (a: string) => void;
+  handleSearch: (m: string) => void;
+}) {
   const location = useLocation();
   return (
     <styles.wrapper $pathname={location.pathname}>
-      <Selector pathname={location.pathname} />
-      <InputBar type={type} pathname={location.pathname} />
+      <Selector
+        pathname={location.pathname}
+        onAreaChange={onAreaChange}
+        area={area}
+      />
+      <InputBar
+        type={type}
+        pathname={location.pathname}
+        onKeywordChange={onKeywordChange}
+        handleSearch={handleSearch}
+      />
     </styles.wrapper>
   );
 }
 
-function Selector({ pathname }: { pathname: string }) {
-  const [area, setArea] = useState('서울');
+function Selector({
+  pathname,
+  area,
+  onAreaChange,
+}: {
+  pathname: string;
+  area: string;
+  onAreaChange: (a: string) => void;
+}) {
   const [isDropBoxVisible, setIsDropBoxVisible] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handler = (event: MouseEvent) => {
+      if (
+        containerRef.current !== null &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsDropBoxVisible(false);
+      }
+    };
+    document.addEventListener('click', handler);
+    return () => {
+      document.removeEventListener('click', handler);
+    };
+  }, []);
 
   return (
     <div
@@ -24,9 +68,10 @@ function Selector({ pathname }: { pathname: string }) {
       onClick={() => {
         setIsDropBoxVisible((prev) => !prev);
       }}
+      ref={containerRef}
     >
       <styles.selector $pathname={pathname}>{area}</styles.selector>
-      {isDropBoxVisible && <DropBox onItemClick={setArea} />}
+      {isDropBoxVisible && <DropBox onItemClick={onAreaChange} />}
       <ChevronIcon
         color={
           pathname === '/' ? 'rgba(234, 234, 234, 1)' : 'rgba(136, 136, 136, 1)'
@@ -40,7 +85,7 @@ function DropBox({ onItemClick }: { onItemClick: (area: string) => void }) {
   return (
     <styles.dropBoxWrapper>
       <styles.dropBoxContainer>
-        {area.map((area) => {
+        {areaMap.map((area) => {
           return (
             <span
               key={area.code}
@@ -58,13 +103,41 @@ function DropBox({ onItemClick }: { onItemClick: (area: string) => void }) {
   );
 }
 
-function InputBar({ type, pathname }: { type: string; pathname: string }) {
+function InputBar({
+  type,
+  pathname,
+  onKeywordChange,
+  handleSearch,
+}: {
+  type: string;
+  pathname: string;
+  onKeywordChange: (k: string) => void;
+  handleSearch: (m: string) => void;
+}) {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') handleSearch(type);
+  };
+
   return (
     <styles.inputContainer $pathname={pathname}>
-      <input type='text' placeholder={`지역 ${type} 찾아보기`} />
-      <SearchIcon
-        color={pathname === '/' ? '#eaeaea' : 'rgba(0, 0, 0, 0.14)'}
+      <input
+        type='text'
+        placeholder={`지역 ${type} 찾아보기`}
+        onChange={(e) => {
+          onKeywordChange(e.target.value);
+        }}
+        onKeyDown={handleKeyDown}
       />
+      <button
+        type='button'
+        onClick={() => {
+          handleSearch(type);
+        }}
+      >
+        <SearchIcon
+          color={pathname === '/' ? '#eaeaea' : 'rgba(0, 0, 0, 0.14)'}
+        />
+      </button>
     </styles.inputContainer>
   );
 }
