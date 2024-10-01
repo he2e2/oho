@@ -1,7 +1,10 @@
 import styled from '@emotion/styled';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
+import { useSearchData, type KeywordItem } from '@/api';
 import { SearchBar, CustomButton, LikeButton } from '@/components';
+import { areaMap, typeMap } from '@/utils';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -22,10 +25,16 @@ const headerMap: Record<
 };
 
 export function ListPage() {
+  const [searchParams] = useSearchParams();
+
   return (
     <styles.wrapper>
       <Header />
-      <ListSection />
+      <ListSection
+        searchKeyword={searchParams.get('keyword') ?? ''}
+        searchArea={searchParams.get('areaCode') ?? '1'}
+        searchCard={searchParams.get('sigunguCode')}
+      />
     </styles.wrapper>
   );
 }
@@ -42,72 +51,117 @@ function Header() {
     <styles.listHeader $pathname={pathname}>
       <h2>{headerData.ko}</h2>
       <span className='eng'>{headerData.en}</span>
+      <styles.path>HOME &gt; {pathname.toUpperCase()}</styles.path>
     </styles.listHeader>
   );
 }
 
-function ListSection() {
+function ListSection({
+  searchKeyword,
+  searchArea,
+  searchCard,
+}: {
+  searchKeyword: string;
+  searchArea: string;
+  searchCard?: string | null;
+}) {
+  const [keyword, setKeyword] = useState(
+    searchCard != null ? searchCard : searchKeyword,
+  );
+  const [area, setArea] = useState(
+    areaMap.find((a) => a.code === searchArea)?.name ?? '서울',
+  );
+  const location = useLocation();
+  const pathname = location.pathname.replace(/\//g, '');
+
+  const { data: searchKeywordData, refetch: search } = useSearchData(
+    keyword,
+    areaMap.find((a) => a.name === area)?.code ?? '1',
+    typeMap.find((t) => t.page === pathname)?.id ?? '15',
+    1,
+  );
+
+  useEffect(() => {
+    if (keyword !== '') search();
+  }, [area, keyword]);
+
   return (
     <styles.listWrapper>
       <styles.listContainer className='mw'>
         <styles.searchSection>
           <span>
-            <span className='bold'>속초시</span>의{' '}
-            <span className='bold'>‘한옥’</span>에 대한 검색 결과입니다.
+            <span className='bold'>{area}</span>
+            {keyword !== '' && (
+              <>
+                의 <span className='bold'>‘{keyword}’</span>
+              </>
+            )}
+            에 대한 검색 결과입니다.
           </span>
           <SearchBar
             type='행사'
-            area=''
-            onAreaChange={() => {}}
-            onKeywordChange={() => {}}
-            handleSearch={() => {}}
+            area={area}
+            keyword={keyword}
+            onAreaChange={setArea}
+            onKeywordChange={setKeyword}
           />
         </styles.searchSection>
-        <styles.listSection></styles.listSection>
+        <styles.listSection>
+          {searchKeywordData?.item === undefined ? (
+            <p>검색 결과가 존재하지 않습니다.</p>
+          ) : (
+            searchKeywordData?.item.map((item) => {
+              return (
+                <ListItem
+                  key={item.title}
+                  title={item.title}
+                  addr1={item.addr1}
+                  addr2={item.addr2}
+                  firstimage={item.firstimage}
+                  contentid={item.contentid}
+                />
+              );
+            })
+          )}
+        </styles.listSection>
       </styles.listContainer>
     </styles.listWrapper>
   );
 }
 
-interface Item {
-  name: string;
-  addr: string;
-  description: string;
-  like: boolean;
-  dDay?: string;
-  additional?: string;
-}
-
-function ListItem({
-  name = '정광원 광장농원',
-  addr = '서울시 노원구',
-  description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores eaque sapiente voluptate aliquam! Praesentium debiti',
-  like = true,
-  dDay = 'D-23',
-  additional,
-}: Item) {
+function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
+  const navigate = useNavigate();
   return (
-    <styles.listItem>
-      <img src='/no-image.png' alt='item-image' />
+    <styles.listItem
+      onClick={() => {
+        navigate(`/detail/${contentid}`);
+      }}
+    >
+      <img
+        src={firstimage === '' ? '/no-image.png' : firstimage}
+        alt='item-image'
+      />
       <styles.contents>
         <div className='withoutDescription'>
           <div
             style={{ gap: '0.3rem', display: 'flex', flexDirection: 'column' }}
           >
-            <h3>{name}</h3>
-            {additional && <p className='additional'>{additional}</p>}
-            <p className='addr'>{addr}</p>
+            <h3>{title}</h3>
+            {/* {additional && <p className='additional'>{additional}</p>} */}
+            <p className='addr'>
+              {addr1} {addr2}
+            </p>
           </div>
           <div
             className='buttons'
             style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}
           >
-            <LikeButton like={like} />
+            <LikeButton like={false} />
             <CustomButton name='상세보기' type='button' />
-            {dDay && <CustomButton name={dDay} type='d-day' />}
+            {/* {dDay && <CustomButton name={dDay} type='d-day' />} */}
           </div>
         </div>
-        <span className='description'>{description}</span>
+        {/* <span className='description'>{description}</span> */}
       </styles.contents>
     </styles.listItem>
   );
@@ -175,6 +229,22 @@ const styles = {
       @media (max-width: 768px) {
         font-size: 1rem;
       }
+    }
+  `,
+
+  path: styled.span`
+    position: absolute;
+    z-index: 10;
+    bottom: 1rem;
+    right: 0.5rem;
+    color: rgba(255, 255, 255, 0.52);
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    @media (max-width: 768px) {
+      font-size: 0.75rem;
     }
   `,
 
@@ -247,7 +317,8 @@ const styles = {
 
     img {
       width: 16.5rem;
-      object-fit: content;
+      height: 12rem;
+      object-fit: cover;
       border-radius: 8px;
 
       @media (max-width: 768px) {
@@ -272,6 +343,7 @@ const styles = {
       @media (max-width: 768px) {
         flex-direction: column;
         gap: 0.5rem;
+        align-items: center;
       }
     }
 

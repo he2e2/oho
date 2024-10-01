@@ -34,6 +34,8 @@ const styles = {
       font-style: normal;
       font-weight: 600;
       padding: 0.8rem 2rem;
+      text-align: center;
+      min-width: 7rem;
 
       @media (max-width: 768px) {
         padding: 0.4rem 1rem;
