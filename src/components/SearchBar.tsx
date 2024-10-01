@@ -7,15 +7,17 @@ import { areaMap } from '@/utils';
 export function SearchBar({
   type,
   area,
+  keyword,
   onKeywordChange,
   onAreaChange,
   handleSearch,
 }: {
   type: string;
   area: string;
+  keyword?: string;
   onKeywordChange: (k: string) => void;
   onAreaChange: (a: string) => void;
-  handleSearch: (m: string) => void;
+  handleSearch?: (m: string, k: string) => void;
 }) {
   const location = useLocation();
   return (
@@ -27,6 +29,7 @@ export function SearchBar({
       />
       <InputBar
         type={type}
+        keyword={keyword}
         pathname={location.pathname}
         onKeywordChange={onKeywordChange}
         handleSearch={handleSearch}
@@ -105,33 +108,40 @@ function DropBox({ onItemClick }: { onItemClick: (area: string) => void }) {
 
 function InputBar({
   type,
+  keyword,
   pathname,
   onKeywordChange,
   handleSearch,
 }: {
   type: string;
+  keyword?: string;
   pathname: string;
   onKeywordChange: (k: string) => void;
-  handleSearch: (m: string) => void;
+  handleSearch?: (m: string, k: string) => void;
 }) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') handleSearch(type);
+    if (event.key === 'Enter') {
+      onKeywordChange(value);
+      if (handleSearch) handleSearch(type, value);
+    }
   };
+  const [value, setValue] = useState<string>(keyword ?? '');
 
   return (
     <styles.inputContainer $pathname={pathname}>
       <input
         type='text'
         placeholder={`지역 ${type} 찾아보기`}
+        value={value}
         onChange={(e) => {
-          onKeywordChange(e.target.value);
+          setValue(e.target.value);
         }}
         onKeyDown={handleKeyDown}
       />
       <button
         type='button'
         onClick={() => {
-          handleSearch(type);
+          if (handleSearch) handleSearch(type, value);
         }}
       >
         <SearchIcon
