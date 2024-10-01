@@ -1,4 +1,4 @@
-export const area = [
+export const areaMap = [
   { code: '1', name: '서울' },
   { code: '2', name: '인천' },
   { code: '3', name: '대전' },
@@ -19,10 +19,10 @@ export const area = [
 ];
 
 export const areaImageMap = [
-  { imageUrl: '/area/seoul.png', name: '서울' },
-  { imageUrl: '/area/yeosu.png', name: '여수' },
-  { imageUrl: '/area/pusan.png', name: '부산' },
-  { imageUrl: '/area/sokcho.png', name: '속초' },
-  { imageUrl: '/area/Gangneung.png', name: '강릉' },
-  { imageUrl: '/area/jeju.png', name: '제주' },
+  { imageUrl: '/area/seoul.png', name: '서울', code: '1' },
+  { imageUrl: '/area/yeosu.png', name: '여수', code: '38', sigungu: '13' },
+  { imageUrl: '/area/pusan.png', name: '부산', code: '6' },
+  { imageUrl: '/area/sokcho.png', name: '속초', code: '32', sigungu: '5' },
+  { imageUrl: '/area/Gangneung.png', name: '강릉', code: '32', sigungu: '1' },
+  { imageUrl: '/area/jeju.png', name: '제주', code: '39' },
 ];

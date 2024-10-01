@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 
 import { SearchBar, ColCard } from '@/components';
-import { areaImageMap } from '@/utils';
+import { areaImageMap, areaMap, typeMap } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 
 export function MainPage() {
   return (
@@ -23,6 +24,19 @@ interface MenuProps {
 
 function SearchSection() {
   const [menu, setMenu] = useState('행사');
+  const [keyword, setKeyword] = useState('');
+  const [area, setArea] = useState('서울');
+  const navigate = useNavigate();
+
+  const handleSearch = (menu: string) => {
+    const queryParams = new URLSearchParams({
+      keyword,
+      areaCode: areaMap.find((a) => a.name === area)?.code ?? '1',
+    });
+    navigate(
+      `/${typeMap.find((type) => type.name === menu)?.page}?${queryParams.toString()}`,
+    );
+  };
 
   return (
     <styles.container className='mw'>
@@ -57,23 +71,43 @@ function SearchSection() {
           관광지 검색
         </styles.menu>
       </styles.tabMenuCon>
-      <SearchBar type={menu} />
+      <SearchBar
+        type={menu}
+        area={area}
+        onKeywordChange={setKeyword}
+        onAreaChange={setArea}
+        handleSearch={handleSearch}
+      />
     </styles.container>
   );
 }
 
 function LegionListSection() {
+  const navigate = useNavigate();
+
+  const handleSearch = (area: string, sigungu?: string) => {
+    const queryParams = new URLSearchParams({
+      areaCode: area,
+      sigunguCode: sigungu ?? '',
+    });
+    navigate(`/festival?${queryParams.toString()}`);
+  };
+
   return (
     <styles.container className='mw'>
       <h2 style={{ color: '#000' }}>인기있는 지역의 행사를 확인해보세요!</h2>
       <styles.areaList>
         {areaImageMap.map((area) => {
           return (
-            <ColCard
+            <button
+              type='button'
               key={area.name}
-              imageUrl={area.imageUrl}
-              name={area.name}
-            />
+              onClick={() => {
+                handleSearch(area.code, area.sigungu);
+              }}
+            >
+              <ColCard imageUrl={area.imageUrl} name={area.name} />
+            </button>
           );
         })}
       </styles.areaList>
