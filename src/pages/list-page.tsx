@@ -48,6 +48,7 @@ function Header() {
     <styles.listHeader $pathname={pathname}>
       <h2>{headerData.ko}</h2>
       <span className='eng'>{headerData.en}</span>
+      <styles.path>HOME &gt; {pathname.toUpperCase()}</styles.path>
     </styles.listHeader>
   );
 }
@@ -194,6 +195,22 @@ const styles = {
       @media (max-width: 768px) {
         font-size: 1rem;
       }
+    }
+  `,
+
+  path: styled.span`
+    position: absolute;
+    z-index: 10;
+    bottom: 1rem;
+    right: 0.5rem;
+    color: rgba(255, 255, 255, 0.52);
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    @media (max-width: 768px) {
+      font-size: 0.75rem;
     }
   `,
 
