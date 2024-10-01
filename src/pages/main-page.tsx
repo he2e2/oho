@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 
 import { SearchBar, ColCard } from '@/components';
-import { areaImageMap } from '@/utils';
+import { areaImageMap, typeMap } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 
 export function MainPage() {
   return (
@@ -23,6 +24,19 @@ interface MenuProps {
 
 function SearchSection() {
   const [menu, setMenu] = useState('행사');
+  const [keyword, setKeyword] = useState('');
+  const [area, setArea] = useState('서울');
+  const navigate = useNavigate();
+
+  const handleSearch = (menu: string) => {
+    const queryParams = new URLSearchParams({
+      keyword,
+      area,
+    });
+    navigate(
+      `/${typeMap.find((area) => area.name === menu)?.page}?${queryParams.toString()}`,
+    );
+  };
 
   return (
     <styles.container className='mw'>
@@ -57,12 +71,24 @@ function SearchSection() {
           관광지 검색
         </styles.menu>
       </styles.tabMenuCon>
-      <SearchBar type={menu} />
+      <SearchBar
+        type={menu}
+        onKeywordChange={setKeyword}
+        onAreaChange={setArea}
+        handleSearch={handleSearch}
+      />
     </styles.container>
   );
 }
 
 function LegionListSection() {
+  /*
+  TODO
+  contentTypeId : 15
+  areaCode : 각 area.code
+  sigunguCode: 있으면 area.sigungu
+  */
+
   return (
     <styles.container className='mw'>
       <h2 style={{ color: '#000' }}>인기있는 지역의 행사를 확인해보세요!</h2>
