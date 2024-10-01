@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { SearchBar, CustomButton, LikeButton } from '@/components';
 import { areaMap } from '@/utils';
+import { useSearchData } from '@/api';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -25,6 +26,7 @@ const headerMap: Record<
 
 export function ListPage() {
   const [searchParams] = useSearchParams();
+
   return (
     <styles.wrapper>
       <Header />
@@ -66,6 +68,8 @@ function ListSection({
   );
 
   // TODO 지역이 바뀌거나 검색어가 바뀔 때(엔터, 클릭) API 요청
+
+  const { data: searchData, refetch: search } = useSearchData(keyword);
 
   return (
     <styles.listWrapper>
