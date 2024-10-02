@@ -1,25 +1,46 @@
-import { Keyword, LikeButton } from '@/components';
 import styled from '@emotion/styled';
+import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+
+import { useCommonData } from '@/api';
+import { Keyword, LikeButton } from '@/components';
+import { checkItem, removeItem, addItem } from '@/utils';
 
 export function DetailPage() {
+  const { id } = useParams();
+  const [like, setLike] = useState(checkItem(id?.toString() ?? ''));
+  const { data: commonData } = useCommonData(id?.toString() ?? '');
+
+  const handleLikesClick = () => {
+    setLike((prev) => !prev);
+
+    if (commonData) {
+      const { title, addr1, addr2, firstimage, contentid } = commonData;
+      if (like) removeItem({ title, addr1, addr2, firstimage, contentid });
+      else addItem({ title, addr1, addr2, firstimage, contentid });
+    }
+  };
+
   return (
     <styles.wrapper className='mw'>
       <styles.prev>
         <i className='fa-solid fa-chevron-left' />
         <span>리스트로 가기</span>
       </styles.prev>
-      <Keyword name='숙박시설' />
+      <Keyword type={commonData?.contenttypeid ?? '15'} />
       <styles.titleSection>
-        <h2>정강원 관광농원</h2>
-        <p className='addr'>경기도 평택시 포승읍 평택항만길 75</p>
+        <h2>{commonData?.title}</h2>
+        <p className='addr'>
+          {commonData?.addr1} {commonData?.addr2}
+        </p>
         <LikeButton
-          like={true}
+          like={like}
           position='absolute'
-          handleLikesClick={() => {}}
+          handleLikesClick={handleLikesClick}
         />
       </styles.titleSection>
       <styles.infoSection>
-        <img src='/no-image.png' alt='detail-image' />
+        <img src={commonData?.firstimage} alt='detail-image' />
         {renderContent('festival')}
       </styles.infoSection>
     </styles.wrapper>

@@ -16,3 +16,18 @@ export interface GetSearchKeywordDataDTO {
     };
   };
 }
+
+export interface GetCommonDataDTO {
+  response: {
+    header: string;
+    body: {
+      items: {
+        item: (KeywordItem & {
+          overview: string;
+          homepage: string;
+          contenttypeid: string;
+        })[];
+      };
+    };
+  };
+}

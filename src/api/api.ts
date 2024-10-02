@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type { GetSearchKeywordDataDTO } from './api.dto';
+import type { GetCommonDataDTO, GetSearchKeywordDataDTO } from './api.dto';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -12,7 +12,6 @@ const getCommonParams = (page: number) => ({
   MobileOS: 'ETC',
   MobileApp: 'oho',
   _type: 'json',
-  arrange: 'C',
 });
 
 export const getSearchKeywordData = (
@@ -30,23 +29,21 @@ export const getSearchKeywordData = (
         contentTypeId: type,
         areaCode: area,
         sigunguCode: sigungu,
+        arrange: 'C',
       },
     })
     .then((res) => res.data.response.body.items);
 
-export const getSearchFestivalData = (
-  page: number,
-  area: string,
-  eventStartDate: string,
-  sigungu?: string,
-) =>
+export const getCommonData = (contentId: string, page: number = 1) =>
   axios
-    .get<GetSearchKeywordDataDTO>(`${API_URL}/searchFestival1`, {
+    .get<GetCommonDataDTO>(`${API_URL}/detailCommon1`, {
       params: {
         ...getCommonParams(page),
-        areaCode: area,
-        sigunguCode: sigungu,
-        eventStartDate: eventStartDate,
+        contentId,
+        defaultYN: 'Y',
+        firstImageYN: 'Y',
+        addrinfoYN: 'Y',
+        overviewYN: 'Y',
       },
     })
-    .then((res) => res.data.response.body.items);
+    .then((res) => res.data.response.body.items.item[0]);
