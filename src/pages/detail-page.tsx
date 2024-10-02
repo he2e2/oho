@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { DetailDatas, useCommonData, useDetailData } from '@/api';
-import { Keyword, LikeButton } from '@/components';
+import { Keyword, LikeButton, LoadingImage } from '@/components';
 import { checkItem, removeItem, addItem } from '@/utils';
 
 export function DetailPage() {
@@ -37,10 +37,6 @@ export function DetailPage() {
 
   return (
     <styles.wrapper className='mw'>
-      <styles.prev>
-        <i className='fa-solid fa-chevron-left' />
-        <span>리스트로 가기</span>
-      </styles.prev>
       <Keyword type={commonData?.contenttypeid ?? '15'} />
       <styles.titleSection>
         <h2>{commonData?.title}</h2>
@@ -54,7 +50,10 @@ export function DetailPage() {
         />
       </styles.titleSection>
       <styles.infoSection>
-        <img src={commonData?.firstimage} alt='detail-image' />
+        <LoadingImage
+          imageURL={commonData?.firstimage ?? '/no-image.png'}
+          page='detail'
+        />
         {renderContent(
           commonData?.contenttypeid,
           detailData!,
@@ -230,6 +229,8 @@ const styles = {
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+      text-align: center;
+      width: 60%;
 
       @media (max-width: 768px) {
         font-size: 1.25rem;
@@ -254,11 +255,13 @@ const styles = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
+    gap: 4rem;
+    padding: 0 2rem;
 
     @media (max-width: 768px) {
       flex-direction: column;
       align-items: start;
+      gap: 2rem;
     }
 
     img {
@@ -275,7 +278,7 @@ const styles = {
   `,
 
   info: styled.ul`
-    width: 60%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 0.69rem;

@@ -1,7 +1,13 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 
-export function LoadingImage({ imageURL }: { imageURL: string }) {
+export function LoadingImage({
+  imageURL,
+  page,
+}: {
+  imageURL: string;
+  page: string;
+}) {
   const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
@@ -17,8 +23,8 @@ export function LoadingImage({ imageURL }: { imageURL: string }) {
   }, [imageURL]);
 
   return (
-    <styles.wrapper>
-      <styles.container $isLoading={imageLoading}>
+    <styles.wrapper $page={page}>
+      <styles.container $isLoading={imageLoading} $page={page}>
         <styles.contents
           $isLoading={imageLoading}
           src={imageURL}
@@ -34,25 +40,29 @@ interface Loading {
   $isLoading: boolean;
 }
 
+interface Page {
+  $page: string;
+}
+
 const styles = {
-  wrapper: styled.div`
-    width: 17rem;
+  wrapper: styled.div<Page>`
+    flex-shrink: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.7rem;
 
     @media (max-width: 768px) {
       position: relative;
       width: 100%;
-      height: 0;
+      height: ${(props) => (props.$page === 'list' ? '0' : 'auto')};
       overflow: hidden;
-      padding-bottom: 70%;
+      padding-bottom: ${(props) => (props.$page === 'list' ? '70%' : '0')};
     }
   `,
 
-  container: styled.div<Loading>`
-    width: 16.5rem;
+  container: styled.div<Loading & Page>`
+    width: ${(props) => (props.$page === 'list' ? '16.5rem' : '100%')};
+    flex: ${(props) => (props.$page === 'detail' ? '1' : '0')};
     height: 12rem;
     object-fit: cover;
     border-radius: 8px;
@@ -75,7 +85,8 @@ const styles = {
       props.$isLoading ? 'loading 1s ease-in-out infinite' : 'none'};
 
     @media (max-width: 768px) {
-      position: absolute;
+      position: ${(props) =>
+        props.$page === 'list' ? 'absolute' : 'relative'};
       top: 0;
       left: 0;
       width: 100%;
@@ -94,5 +105,9 @@ const styles = {
     width: 100%;
     height: 100%;
     display: ${(props) => (props.$isLoading ? 'none' : 'block')};
+
+    @media (max-width: 768px) {
+      object-fit: content;
+    }
   `,
 };

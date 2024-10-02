@@ -104,7 +104,7 @@ export const useFetchItem = (
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
-  const { data, refetch } = useSearchData(
+  const { data, refetch, status } = useSearchData(
     pathname,
     keyword,
     area,
@@ -135,13 +135,13 @@ export const useFetchItem = (
     if (hasMore) refetch();
   };
 
-  return { items, fetchItems, hasMore, page };
+  return { items, fetchItems, hasMore, page, status };
 };
 
 export const useListSectionData = (ref: RefObject<Element>) => {
   const { keyword, setKeyword, area, setArea } = useSearchParamsState();
 
-  const { items, fetchItems, hasMore, page } = useFetchItem(
+  const { items, fetchItems, hasMore, page, status } = useFetchItem(
     window.location.pathname.replace(/\//g, ''),
     keyword,
     areaMap.find((a) => a.name === area)?.code ?? '1',
@@ -151,5 +151,5 @@ export const useListSectionData = (ref: RefObject<Element>) => {
 
   useInfiniteScroll(ref, fetchItems, hasMore);
 
-  return { items, keyword, setKeyword, area, setArea, hasMore, page };
+  return { items, keyword, setKeyword, area, setArea, hasMore, page, status };
 };

@@ -58,7 +58,7 @@ function Header() {
 
 function ListSection() {
   const loadingRef = useRef(null);
-  const { items, keyword, setKeyword, area, setArea, hasMore } =
+  const { items, keyword, setKeyword, area, setArea, hasMore, status } =
     useListSectionData(loadingRef);
 
   return (
@@ -83,7 +83,7 @@ function ListSection() {
           />
         </styles.searchSection>
         <styles.listSection>
-          {items.length === 0 ? (
+          {items.length === 0 && status !== 'pending' ? (
             <p>검색 결과가 존재하지 않습니다.</p>
           ) : (
             items.map((item) => {
@@ -125,6 +125,7 @@ function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
     <styles.listItem>
       <LoadingImage
         imageURL={firstimage === '' ? '/no-image.png' : firstimage}
+        page='list'
       />
       <styles.contents>
         <div className='withoutDescription'>
@@ -134,10 +135,7 @@ function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
               {addr1} {addr2}
             </p>
           </styles.nameContainer>
-          <div
-            className='buttons'
-            style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}
-          >
+          <styles.buttonWrapper>
             <LikeButton like={like} handleLikesClick={handleLikesClick} />
             <div
               onClick={() => {
@@ -146,7 +144,7 @@ function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
             >
               <CustomButton name='상세보기' type='button' />
             </div>
-          </div>
+          </styles.buttonWrapper>
         </div>
       </styles.contents>
     </styles.listItem>
@@ -397,5 +395,15 @@ const styles = {
     display: flex;
     justify-content: center;
     align-items: center;
+  `,
+
+  buttonWrapper: styled.div`
+    gap: 0.5rem;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      gap: 0.3rem;
+    }
   `,
 };
