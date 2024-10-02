@@ -3,7 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 
 import { useListSectionData, type KeywordItem } from '@/api';
-import { SearchBar, CustomButton, LikeButton } from '@/components';
+import {
+  SearchBar,
+  CustomButton,
+  LikeButton,
+  LoadingIndicator,
+} from '@/components';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -51,7 +56,7 @@ function Header() {
 
 function ListSection() {
   const loadingRef = useRef(null);
-  const { items, keyword, setKeyword, area, setArea } =
+  const { items, keyword, setKeyword, area, setArea, hasMore } =
     useListSectionData(loadingRef);
 
   return (
@@ -92,7 +97,7 @@ function ListSection() {
               );
             })
           )}
-          <div ref={loadingRef}>Load</div>
+          {hasMore && <LoadingIndicator />}
         </styles.listSection>
       </styles.listContainer>
     </styles.listWrapper>
@@ -103,21 +108,21 @@ function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
   const navigate = useNavigate();
   return (
     <styles.listItem>
-      <img
-        src={firstimage === '' ? '/no-image.png' : firstimage}
-        alt='item-image'
-        loading='lazy'
-      />
+      <div className='imgWrapper'>
+        <img
+          src={firstimage === '' ? '/no-image.png' : firstimage}
+          alt='item-image'
+          loading='lazy'
+        />
+      </div>
       <styles.contents>
         <div className='withoutDescription'>
-          <div
-            style={{ gap: '0.3rem', display: 'flex', flexDirection: 'column' }}
-          >
+          <styles.nameContainer>
             <h3>{title}</h3>
             <p className='addr'>
               {addr1} {addr2}
             </p>
-          </div>
+          </styles.nameContainer>
           <div
             className='buttons'
             style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}
@@ -285,6 +290,16 @@ const styles = {
       gap: 1.25rem;
     }
 
+    .imgWrapper {
+      @media (max-width: 768px) {
+        position: relative;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+        padding-bottom: 70%;
+      }
+    }
+
     img {
       width: 16.5rem;
       height: 12rem;
@@ -292,7 +307,11 @@ const styles = {
       border-radius: 8px;
 
       @media (max-width: 768px) {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
+        height: 100%;
       }
     }
   `,
@@ -348,6 +367,17 @@ const styles = {
       font-style: normal;
       font-weight: 500;
       line-height: normal;
+    }
+  `,
+
+  nameContainer: styled.div`
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 768px) {
+      align-items: center;
+      gap: 0.5rem;
     }
   `,
 };
