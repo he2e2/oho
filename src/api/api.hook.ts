@@ -115,6 +115,7 @@ export const useFetchItem = (
   }, [data]);
 
   const fetchItems = () => {
+    console.log(area, keyword);
     if (area === '' || keyword === '') return;
     if (hasMore) refetch();
   };

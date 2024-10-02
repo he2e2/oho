@@ -97,7 +97,11 @@ function ListSection() {
               );
             })
           )}
-          {hasMore && <LoadingIndicator />}
+          {hasMore && (
+            <styles.loadingWrapper ref={loadingRef}>
+              <LoadingIndicator />
+            </styles.loadingWrapper>
+          )}
         </styles.listSection>
       </styles.listContainer>
     </styles.listWrapper>
@@ -379,5 +383,12 @@ const styles = {
       align-items: center;
       gap: 0.5rem;
     }
+  `,
+
+  loadingWrapper: styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   `,
 };

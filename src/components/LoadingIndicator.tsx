@@ -1,21 +1,10 @@
 import styled from '@emotion/styled';
 
 export function LoadingIndicator() {
-  return (
-    <styles.wrapper>
-      <styles.loader />
-    </styles.wrapper>
-  );
+  return <styles.loader />;
 }
 
 const styles = {
-  wrapper: styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `,
-
   loader: styled.div`
     width: 30px;
     height: 30px;
