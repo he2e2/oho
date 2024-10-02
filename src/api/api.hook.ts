@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect, type RefObject } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 
-import { getSearchKeywordData } from './api';
+import { getCommonData, getDetailData, getSearchKeywordData } from './api';
 import type { KeywordItem } from './api.dto';
 import { areaMap, typeMap } from '@/utils';
 
@@ -26,6 +26,23 @@ export const useSearchData = (
       pathname,
     ],
     queryFn: () => getSearchKeywordData(page, keyword, type, area, sigungu),
+    enabled,
+  });
+
+export const useCommonData = (contentId: string) =>
+  useQuery({
+    queryKey: ['/oho/detailCommon1', contentId],
+    queryFn: () => getCommonData(contentId),
+  });
+
+export const useDetailData = (
+  contentId: string,
+  contentTypeId: string,
+  enabled: boolean = false,
+) =>
+  useQuery({
+    queryKey: ['/oho/detailCommon1', contentId, contentTypeId],
+    queryFn: () => getDetailData(contentId, contentTypeId),
     enabled,
   });
 
@@ -87,7 +104,7 @@ export const useFetchItem = (
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
-  const { data, refetch } = useSearchData(
+  const { data, refetch, status } = useSearchData(
     pathname,
     keyword,
     area,
@@ -118,13 +135,13 @@ export const useFetchItem = (
     if (hasMore) refetch();
   };
 
-  return { items, fetchItems, hasMore, page };
+  return { items, fetchItems, hasMore, page, status };
 };
 
 export const useListSectionData = (ref: RefObject<Element>) => {
   const { keyword, setKeyword, area, setArea } = useSearchParamsState();
 
-  const { items, fetchItems, hasMore, page } = useFetchItem(
+  const { items, fetchItems, hasMore, page, status } = useFetchItem(
     window.location.pathname.replace(/\//g, ''),
     keyword,
     areaMap.find((a) => a.name === area)?.code ?? '1',
@@ -134,5 +151,5 @@ export const useListSectionData = (ref: RefObject<Element>) => {
 
   useInfiniteScroll(ref, fetchItems, hasMore);
 
-  return { items, keyword, setKeyword, area, setArea, hasMore, page };
+  return { items, keyword, setKeyword, area, setArea, hasMore, page, status };
 };

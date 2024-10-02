@@ -66,7 +66,7 @@ const styles = {
     justify-content: center;
     align-items: center;
     position: ${(props) => (props.$position ? props.$position : 'relative')};
-    right: 0;
+    right: 2rem;
     top: 0;
 
     @media (max-width: 768px) {

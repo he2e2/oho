@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 
-export function Keyword({ name }: { name: string }) {
+import { typeMap } from '@/utils';
+
+export function Keyword({ type }: { type: string }) {
   return (
     <styles.container>
-      <span>{name}</span>
+      <span>{typeMap.find((t) => t.id === type)?.name}</span>
     </styles.container>
   );
 }
