@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
-import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useSearchData, type KeywordItem } from '@/api';
+import { useListSectionData, type KeywordItem } from '@/api';
 import { SearchBar, CustomButton, LikeButton } from '@/components';
-import { areaMap, typeMap } from '@/utils';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -25,16 +23,10 @@ const headerMap: Record<
 };
 
 export function ListPage() {
-  const [searchParams] = useSearchParams();
-
   return (
     <styles.wrapper>
       <Header />
-      <ListSection
-        searchKeyword={searchParams.get('keyword') ?? ''}
-        searchArea={searchParams.get('areaCode') ?? '1'}
-        searchCard={searchParams.get('sigunguCode')}
-      />
+      <ListSection />
     </styles.wrapper>
   );
 }
@@ -56,34 +48,9 @@ function Header() {
   );
 }
 
-function ListSection({
-  searchKeyword,
-  searchArea,
-  searchCard,
-}: {
-  searchKeyword: string;
-  searchArea: string;
-  searchCard?: string | null;
-}) {
-  const [keyword, setKeyword] = useState(
-    searchCard != null ? searchCard : searchKeyword,
-  );
-  const [area, setArea] = useState(
-    areaMap.find((a) => a.code === searchArea)?.name ?? '서울',
-  );
-  const location = useLocation();
-  const pathname = location.pathname.replace(/\//g, '');
-
-  const { data: searchKeywordData, refetch: search } = useSearchData(
-    keyword,
-    areaMap.find((a) => a.name === area)?.code ?? '1',
-    typeMap.find((t) => t.page === pathname)?.id ?? '15',
-    1,
-  );
-
-  useEffect(() => {
-    if (keyword !== '') search();
-  }, [area, keyword]);
+function ListSection() {
+  const { searchKeywordData, keyword, setKeyword, area, setArea } =
+    useListSectionData();
 
   return (
     <styles.listWrapper>

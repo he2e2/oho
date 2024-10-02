@@ -127,6 +127,10 @@ function InputBar({
   };
   const [value, setValue] = useState<string>(keyword ?? '');
 
+  useEffect(() => {
+    setValue(keyword ?? '');
+  }, [keyword]);
+
   return (
     <styles.inputContainer $pathname={pathname}>
       <input
