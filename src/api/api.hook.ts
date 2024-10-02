@@ -104,7 +104,6 @@ export const useFetchItem = (
 
   useEffect(() => {
     if (data?.item === undefined) {
-      setHasMore(false);
       return;
     }
     setItems((prev) => [...prev, ...(data?.item ?? [])]);
