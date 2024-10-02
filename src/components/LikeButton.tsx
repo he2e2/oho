@@ -3,12 +3,14 @@ import styled from '@emotion/styled';
 export function LikeButton({
   like,
   position,
+  handleLikesClick,
 }: {
   like: boolean;
   position?: string;
+  handleLikesClick: () => void;
 }) {
   return (
-    <styles.container $position={position}>
+    <styles.container $position={position} onClick={handleLikesClick}>
       {like ? <Heart /> : <EmptyHeart />}
     </styles.container>
   );
