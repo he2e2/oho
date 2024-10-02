@@ -8,6 +8,7 @@ import {
   CustomButton,
   LikeButton,
   LoadingIndicator,
+  LoadingImage,
 } from '@/components';
 
 const headerMap: Record<
@@ -112,13 +113,9 @@ function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
   const navigate = useNavigate();
   return (
     <styles.listItem>
-      <div className='imgWrapper'>
-        <img
-          src={firstimage === '' ? '/no-image.png' : firstimage}
-          alt='item-image'
-          loading='lazy'
-        />
-      </div>
+      <LoadingImage
+        imageURL={firstimage === '' ? '/no-image.png' : firstimage}
+      />
       <styles.contents>
         <div className='withoutDescription'>
           <styles.nameContainer>
