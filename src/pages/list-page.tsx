@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 import { useListSectionData, type KeywordItem } from '@/api';
 import { SearchBar, CustomButton, LikeButton } from '@/components';
@@ -49,8 +50,9 @@ function Header() {
 }
 
 function ListSection() {
-  const { searchKeywordData, keyword, setKeyword, area, setArea } =
-    useListSectionData();
+  const loadingRef = useRef(null);
+  const { items, keyword, setKeyword, area, setArea } =
+    useListSectionData(loadingRef);
 
   return (
     <styles.listWrapper>
@@ -74,10 +76,10 @@ function ListSection() {
           />
         </styles.searchSection>
         <styles.listSection>
-          {searchKeywordData?.item === undefined ? (
+          {items === undefined ? (
             <p>검색 결과가 존재하지 않습니다.</p>
           ) : (
-            searchKeywordData?.item.map((item) => {
+            items.map((item) => {
               return (
                 <ListItem
                   key={item.title}
@@ -90,6 +92,7 @@ function ListSection() {
               );
             })
           )}
+          <div ref={loadingRef}>Load</div>
         </styles.listSection>
       </styles.listContainer>
     </styles.listWrapper>
@@ -99,14 +102,11 @@ function ListSection() {
 function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
   const navigate = useNavigate();
   return (
-    <styles.listItem
-      onClick={() => {
-        navigate(`/detail/${contentid}`);
-      }}
-    >
+    <styles.listItem>
       <img
         src={firstimage === '' ? '/no-image.png' : firstimage}
         alt='item-image'
+        loading='lazy'
       />
       <styles.contents>
         <div className='withoutDescription'>
@@ -114,7 +114,6 @@ function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
             style={{ gap: '0.3rem', display: 'flex', flexDirection: 'column' }}
           >
             <h3>{title}</h3>
-            {/* {additional && <p className='additional'>{additional}</p>} */}
             <p className='addr'>
               {addr1} {addr2}
             </p>
@@ -124,11 +123,15 @@ function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
             style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}
           >
             <LikeButton like={false} />
-            <CustomButton name='상세보기' type='button' />
-            {/* {dDay && <CustomButton name={dDay} type='d-day' />} */}
+            <div
+              onClick={() => {
+                navigate(`/detail/${contentid}`);
+              }}
+            >
+              <CustomButton name='상세보기' type='button' />
+            </div>
           </div>
         </div>
-        {/* <span className='description'>{description}</span> */}
       </styles.contents>
     </styles.listItem>
   );
