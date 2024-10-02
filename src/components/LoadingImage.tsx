@@ -6,7 +6,7 @@ export function LoadingImage({
   page,
 }: {
   imageURL: string;
-  page: string;
+  page: 'detail' | 'list';
 }) {
   const [imageLoading, setImageLoading] = useState(true);
 
@@ -41,7 +41,7 @@ interface Loading {
 }
 
 interface Page {
-  $page: string;
+  $page: 'detail' | 'list';
 }
 
 const styles = {
