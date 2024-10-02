@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { useListSectionData, type KeywordItem } from '@/api';
 import {
@@ -10,6 +10,7 @@ import {
   LoadingIndicator,
   LoadingImage,
 } from '@/components';
+import { addItem, removeItem, checkItem } from '@/utils';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -111,6 +112,15 @@ function ListSection() {
 
 function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
   const navigate = useNavigate();
+  const [like, setLike] = useState(checkItem(contentid));
+
+  const handleLikesClick = () => {
+    setLike((prev) => !prev);
+
+    if (like) removeItem({ title, addr1, addr2, firstimage, contentid });
+    else addItem({ title, addr1, addr2, firstimage, contentid });
+  };
+
   return (
     <styles.listItem>
       <LoadingImage
@@ -128,7 +138,7 @@ function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
             className='buttons'
             style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}
           >
-            <LikeButton like={false} />
+            <LikeButton like={like} handleLikesClick={handleLikesClick} />
             <div
               onClick={() => {
                 navigate(`/detail/${contentid}`);
