@@ -1,113 +1,167 @@
-import { Keyword, LikeButton } from '@/components';
 import styled from '@emotion/styled';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import { DetailDatas, useCommonData, useDetailData } from '@/api';
+import { Keyword, LikeButton, LoadingImage } from '@/components';
+import { checkItem, removeItem, addItem } from '@/utils';
 
 export function DetailPage() {
+  const { id } = useParams();
+  const [like, setLike] = useState(checkItem(id?.toString() ?? ''));
+  const { data: commonData } = useCommonData(id?.toString() ?? '');
+  const { data: detailData, refetch: getDetails } = useDetailData(
+    id?.toString() ?? '',
+    commonData?.contenttypeid ?? '',
+  );
+
+  const handleLikesClick = () => {
+    setLike((prev) => !prev);
+
+    if (commonData) {
+      const { title, addr1, addr2, firstimage, contentid } = commonData;
+      if (like) removeItem({ title, addr1, addr2, firstimage, contentid });
+      else addItem({ title, addr1, addr2, firstimage, contentid });
+    }
+  };
+
+  useEffect(() => {
+    if (commonData) getDetails();
+  }, [commonData]);
+
+  const getHomepageURL = (homepage?: string) => {
+    const urlMatch = homepage?.match(/href="([^"]*)"/);
+
+    return urlMatch ? urlMatch[1] : undefined;
+  };
+
   return (
     <styles.wrapper className='mw'>
-      <styles.prev>
-        <i className='fa-solid fa-chevron-left' />
-        <span>리스트로 가기</span>
-      </styles.prev>
-      <Keyword name='숙박시설' />
+      <Keyword type={commonData?.contenttypeid ?? '15'} />
       <styles.titleSection>
-        <h2>정강원 관광농원</h2>
-        <p className='addr'>경기도 평택시 포승읍 평택항만길 75</p>
+        <h2>{commonData?.title}</h2>
+        <p className='addr'>
+          {commonData?.addr1} {commonData?.addr2}
+        </p>
         <LikeButton
-          like={true}
+          like={like}
           position='absolute'
-          handleLikesClick={() => {}}
+          handleLikesClick={handleLikesClick}
         />
       </styles.titleSection>
       <styles.infoSection>
-        <img src='/no-image.png' alt='detail-image' />
-        {renderContent('festival')}
+        <LoadingImage
+          imageURL={commonData?.firstimage ?? '/no-image.png'}
+          page='detail'
+        />
+        {renderContent(
+          commonData?.contenttypeid,
+          detailData!,
+          getHomepageURL(commonData?.homepage),
+          commonData?.overview,
+        )}
       </styles.infoSection>
     </styles.wrapper>
   );
 }
 
-const renderContent = (pathname: string) => {
-  switch (pathname) {
-    case 'festival':
+const renderContent = (
+  contentTypeId?: string,
+  details?: DetailDatas,
+  homepage?: string,
+  overview?: string,
+) => {
+  switch (contentTypeId) {
+    case '15':
       return (
         <styles.info>
           <li>
             <styles.category>이벤트 장소</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.eventplace}</styles.cateItem>
           </li>
           <li>
             <styles.category>운영 기간</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>
+              {details?.eventstartdate} ~ {details?.eventstartdate}
+            </styles.cateItem>
           </li>
           <li>
             <styles.category>운영 시간</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.playtime}</styles.cateItem>
           </li>
           <li>
             <styles.category>홈페이지</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>
+              <a href={homepage} target='_blank'>
+                {homepage}
+              </a>
+            </styles.cateItem>
           </li>
           <li>
             <styles.category>상세정보</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{overview}</styles.cateItem>
           </li>
         </styles.info>
       );
-    case 'lodgement':
+    case '32':
       return (
         <styles.info>
           <li>
-            <styles.category>방 개수</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
-          </li>
-          <li>
             <styles.category>방 타입</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.roomtype}</styles.cateItem>
           </li>
           <li>
             <styles.category>체크인 시간</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.checkintime}</styles.cateItem>
           </li>
           <li>
             <styles.category>체크아웃 시간</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.checkouttime}</styles.cateItem>
           </li>
           <li>
             <styles.category>주차 가능 여부</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.parkinglodging}</styles.cateItem>
           </li>
           <li>
             <styles.category>홈페이지</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>
+              <a href={homepage} target='_blank'>
+                {homepage}
+              </a>
+            </styles.cateItem>
           </li>
           <li>
             <styles.category>상세 정보</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{overview}</styles.cateItem>
           </li>
         </styles.info>
       );
-    case 'tour':
+    case '12':
       return (
         <styles.info>
           <li>
             <styles.category>전화번호</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.infocenter}</styles.cateItem>
           </li>
           <li>
             <styles.category>주차 가능 여부</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>홈페이지</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.parking}</styles.cateItem>
           </li>
           <li>
             <styles.category>휴무일</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{details?.restdate}</styles.cateItem>
+          </li>
+          <li>
+            <styles.category>홈페이지</styles.category>
+            <styles.cateItem>
+              <a href={homepage} target='_blank'>
+                {homepage}
+              </a>
+            </styles.cateItem>
           </li>
           <li>
             <styles.category>상세정보</styles.category>
-            <styles.cateItem>도시산림공원 토리숲</styles.cateItem>
+            <styles.cateItem>{overview}</styles.cateItem>
           </li>
         </styles.info>
       );
@@ -175,6 +229,8 @@ const styles = {
       font-style: normal;
       font-weight: 700;
       line-height: normal;
+      text-align: center;
+      width: 60%;
 
       @media (max-width: 768px) {
         font-size: 1.25rem;
@@ -199,11 +255,13 @@ const styles = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
+    gap: 4rem;
+    padding: 0 2rem;
 
     @media (max-width: 768px) {
       flex-direction: column;
       align-items: start;
+      gap: 2rem;
     }
 
     img {
@@ -220,7 +278,7 @@ const styles = {
   `,
 
   info: styled.ul`
-    width: 60%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 0.69rem;
