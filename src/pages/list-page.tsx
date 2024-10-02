@@ -1,10 +1,16 @@
 import styled from '@emotion/styled';
-import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
 
-import { useSearchData, type KeywordItem } from '@/api';
-import { SearchBar, CustomButton, LikeButton } from '@/components';
-import { areaMap, typeMap } from '@/utils';
+import { useListSectionData, type KeywordItem } from '@/api';
+import {
+  SearchBar,
+  CustomButton,
+  LikeButton,
+  LoadingIndicator,
+  LoadingImage,
+} from '@/components';
+import { addItem, removeItem, checkItem } from '@/utils';
 
 const headerMap: Record<
   'festival' | 'lodgement' | 'tour',
@@ -25,16 +31,10 @@ const headerMap: Record<
 };
 
 export function ListPage() {
-  const [searchParams] = useSearchParams();
-
   return (
     <styles.wrapper>
       <Header />
-      <ListSection
-        searchKeyword={searchParams.get('keyword') ?? ''}
-        searchArea={searchParams.get('areaCode') ?? '1'}
-        searchCard={searchParams.get('sigunguCode')}
-      />
+      <ListSection />
     </styles.wrapper>
   );
 }
@@ -56,34 +56,10 @@ function Header() {
   );
 }
 
-function ListSection({
-  searchKeyword,
-  searchArea,
-  searchCard,
-}: {
-  searchKeyword: string;
-  searchArea: string;
-  searchCard?: string | null;
-}) {
-  const [keyword, setKeyword] = useState(
-    searchCard != null ? searchCard : searchKeyword,
-  );
-  const [area, setArea] = useState(
-    areaMap.find((a) => a.code === searchArea)?.name ?? '서울',
-  );
-  const location = useLocation();
-  const pathname = location.pathname.replace(/\//g, '');
-
-  const { data: searchKeywordData, refetch: search } = useSearchData(
-    keyword,
-    areaMap.find((a) => a.name === area)?.code ?? '1',
-    typeMap.find((t) => t.page === pathname)?.id ?? '15',
-    1,
-  );
-
-  useEffect(() => {
-    if (keyword !== '') search();
-  }, [area, keyword]);
+function ListSection() {
+  const loadingRef = useRef(null);
+  const { items, keyword, setKeyword, area, setArea, hasMore } =
+    useListSectionData(loadingRef);
 
   return (
     <styles.listWrapper>
@@ -107,10 +83,10 @@ function ListSection({
           />
         </styles.searchSection>
         <styles.listSection>
-          {searchKeywordData?.item === undefined ? (
+          {items.length === 0 ? (
             <p>검색 결과가 존재하지 않습니다.</p>
           ) : (
-            searchKeywordData?.item.map((item) => {
+            items.map((item) => {
               return (
                 <ListItem
                   key={item.title}
@@ -123,6 +99,11 @@ function ListSection({
               );
             })
           )}
+          {hasMore && (
+            <styles.loadingWrapper ref={loadingRef}>
+              <LoadingIndicator />
+            </styles.loadingWrapper>
+          )}
         </styles.listSection>
       </styles.listContainer>
     </styles.listWrapper>
@@ -131,37 +112,42 @@ function ListSection({
 
 function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
   const navigate = useNavigate();
+  const [like, setLike] = useState(checkItem(contentid));
+
+  const handleLikesClick = () => {
+    setLike((prev) => !prev);
+
+    if (like) removeItem({ title, addr1, addr2, firstimage, contentid });
+    else addItem({ title, addr1, addr2, firstimage, contentid });
+  };
+
   return (
-    <styles.listItem
-      onClick={() => {
-        navigate(`/detail/${contentid}`);
-      }}
-    >
-      <img
-        src={firstimage === '' ? '/no-image.png' : firstimage}
-        alt='item-image'
+    <styles.listItem>
+      <LoadingImage
+        imageURL={firstimage === '' ? '/no-image.png' : firstimage}
       />
       <styles.contents>
         <div className='withoutDescription'>
-          <div
-            style={{ gap: '0.3rem', display: 'flex', flexDirection: 'column' }}
-          >
+          <styles.nameContainer>
             <h3>{title}</h3>
-            {/* {additional && <p className='additional'>{additional}</p>} */}
             <p className='addr'>
               {addr1} {addr2}
             </p>
-          </div>
+          </styles.nameContainer>
           <div
             className='buttons'
             style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}
           >
-            <LikeButton like={false} />
-            <CustomButton name='상세보기' type='button' />
-            {/* {dDay && <CustomButton name={dDay} type='d-day' />} */}
+            <LikeButton like={like} handleLikesClick={handleLikesClick} />
+            <div
+              onClick={() => {
+                navigate(`/detail/${contentid}`);
+              }}
+            >
+              <CustomButton name='상세보기' type='button' />
+            </div>
           </div>
         </div>
-        {/* <span className='description'>{description}</span> */}
       </styles.contents>
     </styles.listItem>
   );
@@ -315,6 +301,16 @@ const styles = {
       gap: 1.25rem;
     }
 
+    .imgWrapper {
+      @media (max-width: 768px) {
+        position: relative;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+        padding-bottom: 70%;
+      }
+    }
+
     img {
       width: 16.5rem;
       height: 12rem;
@@ -322,7 +318,11 @@ const styles = {
       border-radius: 8px;
 
       @media (max-width: 768px) {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
+        height: 100%;
       }
     }
   `,
@@ -379,5 +379,23 @@ const styles = {
       font-weight: 500;
       line-height: normal;
     }
+  `,
+
+  nameContainer: styled.div`
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 768px) {
+      align-items: center;
+      gap: 0.5rem;
+    }
+  `,
+
+  loadingWrapper: styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   `,
 };

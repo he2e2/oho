@@ -12,7 +12,11 @@ export function DetailPage() {
       <styles.titleSection>
         <h2>정강원 관광농원</h2>
         <p className='addr'>경기도 평택시 포승읍 평택항만길 75</p>
-        <LikeButton like={true} position='absolute' />
+        <LikeButton
+          like={true}
+          position='absolute'
+          handleLikesClick={() => {}}
+        />
       </styles.titleSection>
       <styles.infoSection>
         <img src='/no-image.png' alt='detail-image' />
