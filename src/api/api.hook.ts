@@ -103,19 +103,18 @@ export const useFetchItem = (
   }, [keyword, area]);
 
   useEffect(() => {
-    if (data?.item.length === 0) {
+    if (data?.item === undefined) {
       setHasMore(false);
-    } else {
-      setItems((prev) => [...prev, ...(data?.item ?? [])]);
-      if (data?.item !== undefined) {
-        setPage((prevPage) => prevPage + 1);
-        if (data.item.length < 4) setHasMore(false);
-      }
+      return;
+    }
+    setItems((prev) => [...prev, ...(data?.item ?? [])]);
+    if (data?.item !== undefined) {
+      setPage((prevPage) => prevPage + 1);
+      if (data.item.length < 4) setHasMore(false);
     }
   }, [data]);
 
   const fetchItems = () => {
-    console.log(area, keyword);
     if (area === '' || keyword === '') return;
     if (hasMore) refetch();
   };

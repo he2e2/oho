@@ -81,7 +81,7 @@ function ListSection() {
           />
         </styles.searchSection>
         <styles.listSection>
-          {items === undefined ? (
+          {items.length === 0 ? (
             <p>검색 결과가 존재하지 않습니다.</p>
           ) : (
             items.map((item) => {
