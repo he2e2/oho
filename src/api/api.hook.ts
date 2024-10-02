@@ -48,6 +48,8 @@ export const useDetailData = (
 
 export const useSearchParamsState = () => {
   const location = useLocation();
+  const path = location.pathname.replace(/\//g, '');
+  const type = typeMap.find((t) => t.page === path)?.id;
   const [searchParams] = useSearchParams();
 
   const [keyword, setKeyword] = useState('');
@@ -67,7 +69,7 @@ export const useSearchParamsState = () => {
     if (keyword === '') setKeyword('서울');
   }, [area, keyword]);
 
-  return { keyword, setKeyword, area, setArea };
+  return { keyword, setKeyword, area, setArea, type };
 };
 
 export const useInfiniteScroll = (
@@ -139,7 +141,7 @@ export const useFetchItem = (
 };
 
 export const useListSectionData = (ref: RefObject<Element>) => {
-  const { keyword, setKeyword, area, setArea } = useSearchParamsState();
+  const { keyword, setKeyword, area, setArea, type } = useSearchParamsState();
 
   const { items, fetchItems, hasMore, page, status } = useFetchItem(
     window.location.pathname.replace(/\//g, ''),
@@ -151,5 +153,15 @@ export const useListSectionData = (ref: RefObject<Element>) => {
 
   useInfiniteScroll(ref, fetchItems, hasMore);
 
-  return { items, keyword, setKeyword, area, setArea, hasMore, page, status };
+  return {
+    items,
+    type,
+    keyword,
+    setKeyword,
+    area,
+    setArea,
+    hasMore,
+    page,
+    status,
+  };
 };

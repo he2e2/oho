@@ -58,7 +58,7 @@ function Header() {
 
 function ListSection() {
   const loadingRef = useRef(null);
-  const { items, keyword, setKeyword, area, setArea, hasMore, status } =
+  const { items, keyword, setKeyword, area, setArea, hasMore, status, type } =
     useListSectionData(loadingRef);
 
   return (
@@ -95,6 +95,7 @@ function ListSection() {
                   addr2={item.addr2}
                   firstimage={item.firstimage}
                   contentid={item.contentid}
+                  type={type ?? '15'}
                 />
               );
             })
@@ -110,15 +111,22 @@ function ListSection() {
   );
 }
 
-function ListItem({ title, addr1, addr2, firstimage, contentid }: KeywordItem) {
+function ListItem({
+  title,
+  addr1,
+  addr2,
+  firstimage,
+  contentid,
+  type,
+}: KeywordItem & { type: string }) {
   const navigate = useNavigate();
-  const [like, setLike] = useState(checkItem(contentid));
+  const [like, setLike] = useState(checkItem(contentid, type));
 
   const handleLikesClick = () => {
     setLike((prev) => !prev);
 
-    if (like) removeItem({ title, addr1, addr2, firstimage, contentid });
-    else addItem({ title, addr1, addr2, firstimage, contentid });
+    if (like) removeItem({ title, addr1, addr2, firstimage, contentid }, type);
+    else addItem({ title, addr1, addr2, firstimage, contentid }, type);
   };
 
   return (
