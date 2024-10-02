@@ -1,32 +1,30 @@
 import type { KeywordItem } from '@/api';
 
-const LIKES_KEY = 'likes';
-
-export const addItem = (item: KeywordItem) => {
-  const prevItems = loadStorage();
+export const addItem = (item: KeywordItem, type: string) => {
+  const prevItems = loadStorage(type);
   if (!prevItems.includes(item)) {
     prevItems.push(item);
-    localStorage.setItem(LIKES_KEY, JSON.stringify(prevItems));
+    localStorage.setItem(type, JSON.stringify(prevItems));
   }
 };
 
-export const removeItem = (item: KeywordItem) => {
-  const prevItems = loadStorage();
+export const removeItem = (item: KeywordItem, type: string) => {
+  const prevItems = loadStorage(type);
   const updatedItems = prevItems.filter(
     (like) => like.contentid !== item.contentid,
   );
-  localStorage.setItem(LIKES_KEY, JSON.stringify(updatedItems));
+  localStorage.setItem(type, JSON.stringify(updatedItems));
 };
 
-export const loadStorage = (): KeywordItem[] => {
-  const likes = localStorage.getItem(LIKES_KEY);
+export const loadStorage = (type: string): KeywordItem[] => {
+  const likes = localStorage.getItem(type);
   return likes ? JSON.parse(likes) : [];
 };
 
-export const clearStorage = () => {
-  localStorage.removeItem(LIKES_KEY);
+export const clearStorage = (type: string) => {
+  localStorage.removeItem(type);
 };
 
-export const checkItem = (id: string) => {
-  return loadStorage().some((item) => item.contentid === id);
+export const checkItem = (id: string, type: string) => {
+  return loadStorage(type).some((item) => item.contentid === id);
 };

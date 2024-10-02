@@ -1,4 +1,5 @@
 import { RowCard } from '@/components';
+import { loadStorage, typeMap } from '@/utils';
 import styled from '@emotion/styled';
 
 const dummy = [
@@ -50,21 +51,23 @@ export function MyPage() {
 }
 
 function LikeList({ type }: { type: string }) {
+  const list = loadStorage(typeMap.find((t) => t.name === type)!.id);
+
   return (
     <styles.likeList>
       <h3>내가 찜한 {type} 목록</h3>
       <div className='cardsWrapper'>
         <div className='cards'>
-          {dummy.length === 0 ? (
+          {list.length === 0 ? (
             <p className='noData'>찜 목록이 없습니다.</p>
           ) : (
-            dummy.map((item) => (
+            list.map((item) => (
               <RowCard
-                key={item.id}
-                name={item.name}
-                addr={item.addr}
-                imageUrl={item.imageUrl}
-                date={item.date}
+                key={item.contentid}
+                name={item.title}
+                addr={item.addr1}
+                imageUrl={item.firstimage}
+                contentid={item.contentid}
               />
             ))
           )}

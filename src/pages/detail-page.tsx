@@ -8,7 +8,7 @@ import { checkItem, removeItem, addItem } from '@/utils';
 
 export function DetailPage() {
   const { id } = useParams();
-  const [like, setLike] = useState(checkItem(id?.toString() ?? ''));
+  const [like, setLike] = useState(false);
   const { data: commonData } = useCommonData(id?.toString() ?? '');
   const { data: detailData, refetch: getDetails } = useDetailData(
     id?.toString() ?? '',
@@ -19,14 +19,23 @@ export function DetailPage() {
     setLike((prev) => !prev);
 
     if (commonData) {
-      const { title, addr1, addr2, firstimage, contentid } = commonData;
-      if (like) removeItem({ title, addr1, addr2, firstimage, contentid });
-      else addItem({ title, addr1, addr2, firstimage, contentid });
+      const { title, addr1, addr2, firstimage, contentid, contenttypeid } =
+        commonData;
+      if (like)
+        removeItem(
+          { title, addr1, addr2, firstimage, contentid },
+          contenttypeid,
+        );
+      else
+        addItem({ title, addr1, addr2, firstimage, contentid }, contenttypeid);
     }
   };
 
   useEffect(() => {
-    if (commonData) getDetails();
+    if (commonData && id) {
+      getDetails();
+      setLike(checkItem(id.toString(), commonData.contenttypeid));
+    }
   }, [commonData]);
 
   const getHomepageURL = (homepage?: string) => {
