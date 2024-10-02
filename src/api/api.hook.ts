@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect, type RefObject } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 
-import { getCommonData, getSearchKeywordData } from './api';
+import { getCommonData, getDetailData, getSearchKeywordData } from './api';
 import type { KeywordItem } from './api.dto';
 import { areaMap, typeMap } from '@/utils';
 
@@ -33,6 +33,17 @@ export const useCommonData = (contentId: string) =>
   useQuery({
     queryKey: ['/oho/detailCommon1', contentId],
     queryFn: () => getCommonData(contentId),
+  });
+
+export const useDetailData = (
+  contentId: string,
+  contentTypeId: string,
+  enabled: boolean = false,
+) =>
+  useQuery({
+    queryKey: ['/oho/detailCommon1', contentId, contentTypeId],
+    queryFn: () => getDetailData(contentId, contentTypeId),
+    enabled,
   });
 
 export const useSearchParamsState = () => {

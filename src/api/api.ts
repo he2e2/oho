@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-import type { GetCommonDataDTO, GetSearchKeywordDataDTO } from './api.dto';
+import type {
+  GetDetailDataDTO,
+  GetCommonDataDTO,
+  GetSearchKeywordDataDTO,
+} from './api.dto';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -44,6 +48,21 @@ export const getCommonData = (contentId: string, page: number = 1) =>
         firstImageYN: 'Y',
         addrinfoYN: 'Y',
         overviewYN: 'Y',
+      },
+    })
+    .then((res) => res.data.response.body.items.item[0]);
+
+export const getDetailData = (
+  contentId: string,
+  contentTypeId: string,
+  page: number = 1,
+) =>
+  axios
+    .get<GetDetailDataDTO>(`${API_URL}/detailIntro1`, {
+      params: {
+        ...getCommonParams(page),
+        contentId,
+        contentTypeId,
       },
     })
     .then((res) => res.data.response.body.items.item[0]);
