@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import DOMPurify from 'dompurify';
 
 import { DetailDatas, useCommonData, useDetailData } from '@/api';
 import { Keyword, LikeButton, LoadingImage } from '@/components';
@@ -80,7 +81,8 @@ const formatEmptyString = (detail: string) => {
 };
 
 const stringToJSX = (text?: string): JSX.Element => {
-  return <div dangerouslySetInnerHTML={{ __html: text ?? '' }} />;
+  const cleanHTML = DOMPurify.sanitize(text ?? '');
+  return <div dangerouslySetInnerHTML={{ __html: cleanHTML }} />;
 };
 
 const InfoList = ({
