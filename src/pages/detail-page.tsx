@@ -75,6 +75,29 @@ export function DetailPage() {
   );
 }
 
+const formatEmptyString = (detail: string) => {
+  return detail === '' ? '정보가 없습니다.' : detail;
+};
+
+const stringToJSX = (text?: string): JSX.Element => {
+  return <div dangerouslySetInnerHTML={{ __html: text ?? '' }} />;
+};
+
+const InfoList = ({
+  category,
+  content,
+}: {
+  category: string;
+  content?: string | JSX.Element;
+}) => (
+  <li>
+    <styles.category>{category}</styles.category>
+    <styles.cateItem>
+      {typeof content === 'string' ? formatEmptyString(content) : content}
+    </styles.cateItem>
+  </li>
+);
+
 const renderContent = (
   contentTypeId?: string,
   details?: DetailDatas,
@@ -82,98 +105,53 @@ const renderContent = (
   overview?: string,
 ) => {
   const isMobile = useIsMobile();
+
+  const homepageLink = (
+    <a href={homepage} target='_blank'>
+      {isMobile ? '🔗링크' : formatEmptyString(homepage ?? '')}
+    </a>
+  );
+
+  const commonInfo = (
+    <>
+      <InfoList category='홈페이지' content={homepageLink} />
+      <InfoList category='상세정보' content={stringToJSX(overview)} />
+    </>
+  );
+
   switch (contentTypeId) {
     case '15':
       return (
         <styles.info>
-          <li>
-            <styles.category>이벤트 장소</styles.category>
-            <styles.cateItem>{details?.eventplace}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>운영 기간</styles.category>
-            <styles.cateItem>
-              {details?.eventstartdate} ~ {details?.eventstartdate}
-            </styles.cateItem>
-          </li>
-          <li>
-            <styles.category>운영 시간</styles.category>
-            <styles.cateItem>{details?.playtime}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>홈페이지</styles.category>
-            <styles.cateItem>
-              <a href={homepage} target='_blank'>
-                {isMobile ? '🔗링크' : homepage}
-              </a>
-            </styles.cateItem>
-          </li>
-          <li>
-            <styles.category>상세정보</styles.category>
-            <styles.cateItem>{overview}</styles.cateItem>
-          </li>
+          <InfoList category='이벤트 장소' content={details?.eventplace} />
+          <InfoList
+            category='운영 기간'
+            content={`${details?.eventstartdate} ~ ${details?.eventenddate}`}
+          />
+          <InfoList category='운영 시간' content={details?.playtime} />
+          {commonInfo}
         </styles.info>
       );
     case '32':
       return (
         <styles.info>
-          <li>
-            <styles.category>방 타입</styles.category>
-            <styles.cateItem>{details?.roomtype}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>체크인 시간</styles.category>
-            <styles.cateItem>{details?.checkintime}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>체크아웃 시간</styles.category>
-            <styles.cateItem>{details?.checkouttime}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>주차 가능 여부</styles.category>
-            <styles.cateItem>{details?.parkinglodging}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>홈페이지</styles.category>
-            <styles.cateItem>
-              <a href={homepage} target='_blank'>
-                {isMobile ? '🔗링크' : homepage}
-              </a>
-            </styles.cateItem>
-          </li>
-          <li>
-            <styles.category>상세 정보</styles.category>
-            <styles.cateItem>{overview}</styles.cateItem>
-          </li>
+          <InfoList category='방 타입' content={details?.roomtype} />
+          <InfoList category='체크인 시간' content={details?.checkintime} />
+          <InfoList category='체크아웃 시간' content={details?.checkouttime} />
+          <InfoList
+            category='주차 가능 여부'
+            content={details?.parkinglodging}
+          />
+          {commonInfo}
         </styles.info>
       );
     case '12':
       return (
         <styles.info>
-          <li>
-            <styles.category>전화번호</styles.category>
-            <styles.cateItem>{details?.infocenter}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>주차 가능 여부</styles.category>
-            <styles.cateItem>{details?.parking}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>휴무일</styles.category>
-            <styles.cateItem>{details?.restdate}</styles.cateItem>
-          </li>
-          <li>
-            <styles.category>홈페이지</styles.category>
-            <styles.cateItem>
-              <a href={homepage} target='_blank'>
-                {isMobile ? '🔗링크' : homepage}
-              </a>
-            </styles.cateItem>
-          </li>
-          <li>
-            <styles.category>상세정보</styles.category>
-            <styles.cateItem>{overview}</styles.cateItem>
-          </li>
+          <InfoList category='전화번호' content={details?.infocenter} />
+          <InfoList category='주차 가능 여부' content={details?.parking} />
+          <InfoList category='휴무일' content={details?.restdate} />
+          {commonInfo}
         </styles.info>
       );
     default:
