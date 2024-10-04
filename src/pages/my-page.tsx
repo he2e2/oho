@@ -2,44 +2,6 @@ import { RowCard } from '@/components';
 import { loadStorage, typeMap } from '@/utils';
 import styled from '@emotion/styled';
 
-const dummy = [
-  {
-    id: 1,
-    imageUrl: '/no-image.png',
-    name: '정광원 관광농원',
-    date: '2024.09.12',
-    addr: '서울시 노원구',
-  },
-  {
-    id: 2,
-    imageUrl: '/no-image.png',
-    name: '정광원 관광농원',
-    date: '2024.09.12',
-    addr: '서울시 노원구',
-  },
-  {
-    id: 3,
-    imageUrl: '/no-image.png',
-    name: '정광원 관광농원',
-    date: '2024.09.12',
-    addr: '서울시 노원구',
-  },
-  {
-    id: 4,
-    imageUrl: '/no-image.png',
-    name: '정광원 관광농원',
-    date: '2024.09.12',
-    addr: '서울시 노원구',
-  },
-  {
-    id: 5,
-    imageUrl: '/no-image.png',
-    name: '정광원 관광농원',
-    date: '2024.09.12',
-    addr: '서울시 노원구',
-  },
-];
-
 export function MyPage() {
   return (
     <styles.wrapper className='mw'>

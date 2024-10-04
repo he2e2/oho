@@ -238,7 +238,7 @@ const styles = {
   `,
 
   inputContainer: styled.div<Path>`
-    flex: 1 0 0;
+    width: 100%;
     border-radius: 8px;
     border: ${(props) =>
       props.$pathname === '/'
