@@ -209,7 +209,6 @@ const styles = {
       padding: 1.125rem;
       max-width: 10rem;
       width: 20%;
-      min-width: 6rem;
       border-radius: 8px;
       border: ${(props) =>
         props.$pathname === '/'
@@ -254,7 +253,7 @@ const styles = {
     }
 
     input {
-      flex: 1;
+      width: 100%;
       color: ${(props) => (props.$pathname === '/' ? '#fff' : '#000')};
       font-size: 0.8125rem;
       font-style: normal;

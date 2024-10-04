@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { DetailDatas, useCommonData, useDetailData } from '@/api';
 import { Keyword, LikeButton, LoadingImage } from '@/components';
+import { useIsMobile } from '@/hooks';
 import { checkItem, removeItem, addItem } from '@/utils';
 
 export function DetailPage() {
@@ -80,6 +81,7 @@ const renderContent = (
   homepage?: string,
   overview?: string,
 ) => {
+  const isMobile = useIsMobile();
   switch (contentTypeId) {
     case '15':
       return (
@@ -102,7 +104,7 @@ const renderContent = (
             <styles.category>홈페이지</styles.category>
             <styles.cateItem>
               <a href={homepage} target='_blank'>
-                {homepage}
+                {isMobile ? '🔗링크' : homepage}
               </a>
             </styles.cateItem>
           </li>
@@ -135,7 +137,7 @@ const renderContent = (
             <styles.category>홈페이지</styles.category>
             <styles.cateItem>
               <a href={homepage} target='_blank'>
-                {homepage}
+                {isMobile ? '🔗링크' : homepage}
               </a>
             </styles.cateItem>
           </li>
@@ -164,7 +166,7 @@ const renderContent = (
             <styles.category>홈페이지</styles.category>
             <styles.cateItem>
               <a href={homepage} target='_blank'>
-                {homepage}
+                {isMobile ? '🔗링크' : homepage}
               </a>
             </styles.cateItem>
           </li>
