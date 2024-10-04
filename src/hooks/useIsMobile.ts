@@ -9,3 +9,12 @@ export function useIsMobile() {
   }, [mobile]);
   return isMobile;
 }
+
+export function useIsMini() {
+  const [isMini, setIsMini] = useState(false);
+  const mini = useMediaQuery('(max-width: 320px)');
+  useEffect(() => {
+    setIsMini(mini);
+  }, [mini]);
+  return isMini;
+}

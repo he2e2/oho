@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { areaMap } from '@/utils';
+import { useIsMini } from '@/hooks';
 
 export function SearchBar({
   type,
@@ -48,6 +49,7 @@ function Selector({
   onAreaChange: (a: string) => void;
 }) {
   const [isDropBoxVisible, setIsDropBoxVisible] = useState(false);
+  const isMini = useIsMini();
 
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -75,11 +77,15 @@ function Selector({
     >
       <styles.selector $pathname={pathname}>{area}</styles.selector>
       {isDropBoxVisible && <DropBox onItemClick={onAreaChange} />}
-      <ChevronIcon
-        color={
-          pathname === '/' ? 'rgba(234, 234, 234, 1)' : 'rgba(136, 136, 136, 1)'
-        }
-      />
+      {!isMini && (
+        <ChevronIcon
+          color={
+            pathname === '/'
+              ? 'rgba(234, 234, 234, 1)'
+              : 'rgba(136, 136, 136, 1)'
+          }
+        />
+      )}
     </div>
   );
 }
@@ -276,6 +282,7 @@ const styles = {
 
   dropBoxWrapper: styled.div`
     width: 100%;
+    min-width: 6rem;
     height: 10rem;
     padding: 0.8rem;
     background-color: #fff;

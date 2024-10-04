@@ -102,7 +102,7 @@ function ListSection() {
           )}
           {hasMore && (
             <styles.loadingWrapper ref={loadingRef}>
-              <LoadingIndicator />
+              {items.length !== 0 && <LoadingIndicator />}
             </styles.loadingWrapper>
           )}
         </styles.listSection>
@@ -403,6 +403,7 @@ const styles = {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 2rem 0;
   `,
 
   buttonWrapper: styled.div`
