@@ -68,5 +68,9 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    hmr: true,
+  },
+  build: {
+    outDir: 'dist',
   },
 });
