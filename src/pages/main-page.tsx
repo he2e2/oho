@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { SearchBar, ColCard } from '@/components';
 import { areaImageMap, areaMap, typeMap } from '@/utils';
@@ -93,10 +93,35 @@ function LegionListSection() {
     navigate(`/festival?${queryParams.toString()}`);
   };
 
+  const [isScrolled, setIsScrolled] = useState(false);
+  const scrollableDivRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkForScroll = () => {
+      if (scrollableDivRef.current) {
+        if (
+          scrollableDivRef.current.scrollWidth >
+          scrollableDivRef.current.clientWidth
+        ) {
+          setIsScrolled(true);
+        } else {
+          setIsScrolled(false);
+        }
+      }
+    };
+
+    checkForScroll();
+
+    window.addEventListener('resize', checkForScroll);
+    return () => {
+      window.removeEventListener('resize', checkForScroll);
+    };
+  }, []);
+
   return (
     <styles.container className='mw'>
       <h2 style={{ color: '#000' }}>인기있는 지역의 행사를 확인해보세요!</h2>
-      <styles.areaList>
+      <styles.areaList $isScroll={isScrolled} ref={scrollableDivRef}>
         {areaImageMap.map((area) => {
           return (
             <button
@@ -117,6 +142,10 @@ function LegionListSection() {
 
 interface BackgroundProps {
   $section: 'top' | 'bottom';
+}
+
+interface Scroll {
+  $isScroll: boolean;
 }
 
 const styles = {
@@ -190,10 +219,10 @@ const styles = {
     }
   `,
 
-  areaList: styled.div`
+  areaList: styled.div<Scroll>`
     display: flex;
     width: 100%;
-    justify-content: center;
+    justify-content: ${(props) => (props.$isScroll ? 'start' : 'center')};
     gap: 1rem;
     padding: 1rem;
 
@@ -209,8 +238,8 @@ const styles = {
       border-radius: 20px;
     }
 
-    @media (max-width: 768px) {
-      justify-content: start;
-    }
+    /* @media (max-width: 768px) {
+      justify-content: c;
+    } */
   `,
 };
