@@ -1,10 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect, type RefObject } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { getCommonData, getDetailData, getSearchKeywordData } from './api';
 import type { KeywordItem } from './api.dto';
 import { areaMap, typeMap } from '@/utils';
+
+const DEFAULT_AREA_CODE = '1';
+const DEFAULT_TYPE_ID = '15';
+const ITEM_LOAD_THRESHOLD = 4;
+
+const getPathnameKey = (pathname: string) => pathname.replace(/\//g, '');
 
 export const useSearchData = (
   pathname: string,
@@ -41,14 +47,13 @@ export const useDetailData = (
   enabled: boolean = false,
 ) =>
   useQuery({
-    queryKey: ['/oho/detailCommon1', contentId, contentTypeId],
+    queryKey: ['/oho/detailIntro1', contentId, contentTypeId],
     queryFn: () => getDetailData(contentId, contentTypeId),
     enabled,
   });
 
 export const useSearchParamsState = () => {
-  const location = useLocation();
-  const path = location.pathname.replace(/\//g, '');
+  const path = getPathnameKey(window.location.pathname);
   const type = typeMap.find((t) => t.page === path)?.id;
   const [searchParams] = useSearchParams();
 
@@ -57,16 +62,16 @@ export const useSearchParamsState = () => {
 
   useEffect(() => {
     const newKeyword = searchParams.get('keyword') ?? '';
-    const newAreaCode = searchParams.get('areaCode') ?? '1';
+    const newAreaCode = searchParams.get('areaCode') ?? DEFAULT_AREA_CODE;
     const newCard = searchParams.get('sigunguCode');
 
     setKeyword(newCard != null ? newCard : newKeyword);
     setArea(areaMap.find((a) => a.code === newAreaCode)?.name ?? '서울');
-  }, [location.pathname, searchParams]);
+  }, [window.location.pathname, searchParams]);
 
   useEffect(() => {
     if (area === '') return;
-    if (keyword === '') setKeyword('서울');
+    if (keyword === '') setKeyword(area);
   }, [area, keyword]);
 
   return { keyword, setKeyword, area, setArea, type };
@@ -126,10 +131,8 @@ export const useFetchItem = (
       return;
     }
     setItems((prev) => [...prev, ...(data?.item ?? [])]);
-    if (data?.item !== undefined) {
-      setPage((prevPage) => prevPage + 1);
-      if (data.item.length < 4) setHasMore(false);
-    }
+    setPage((prevPage) => prevPage + 1);
+    if (data.item.length < ITEM_LOAD_THRESHOLD) setHasMore(false);
   }, [data]);
 
   const fetchItems = () => {
@@ -144,11 +147,11 @@ export const useListSectionData = (ref: RefObject<Element>) => {
   const { keyword, setKeyword, area, setArea, type } = useSearchParamsState();
 
   const { items, fetchItems, hasMore, page, status } = useFetchItem(
-    window.location.pathname.replace(/\//g, ''),
+    getPathnameKey(window.location.pathname),
     keyword,
-    areaMap.find((a) => a.name === area)?.code ?? '1',
-    typeMap.find((t) => t.page === window.location.pathname.replace(/\//g, ''))
-      ?.id ?? '15',
+    areaMap.find((a) => a.name === area)?.code ?? DEFAULT_AREA_CODE,
+    typeMap.find((t) => t.page === getPathnameKey(window.location.pathname))
+      ?.id ?? DEFAULT_TYPE_ID,
   );
 
   useInfiniteScroll(ref, fetchItems, hasMore);
