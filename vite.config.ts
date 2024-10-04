@@ -8,11 +8,9 @@ export default defineConfig({
   base: '/',
   server: {
     port: 3000,
-    fs: {
-      strict: false,
-    },
   },
   build: {
+    outDir: 'dist',
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
