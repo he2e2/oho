@@ -67,10 +67,16 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
-    hmr: true,
+    fs: {
+      strict: false,
+    },
   },
   build: {
-    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
+    },
   },
   resolve: {
     alias: {
