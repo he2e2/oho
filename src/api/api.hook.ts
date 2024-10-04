@@ -6,6 +6,10 @@ import { getCommonData, getDetailData, getSearchKeywordData } from './api';
 import type { KeywordItem } from './api.dto';
 import { areaMap, typeMap } from '@/utils';
 
+const DEFAULT_AREA_CODE = '1';
+const DEFAULT_TYPE_ID = '15';
+const ITEM_LOAD_THRESHOLD = 4;
+
 export const useSearchData = (
   pathname: string,
   keyword: string,
@@ -57,7 +61,7 @@ export const useSearchParamsState = () => {
 
   useEffect(() => {
     const newKeyword = searchParams.get('keyword') ?? '';
-    const newAreaCode = searchParams.get('areaCode') ?? '1';
+    const newAreaCode = searchParams.get('areaCode') ?? DEFAULT_AREA_CODE;
     const newCard = searchParams.get('sigunguCode');
 
     setKeyword(newCard != null ? newCard : newKeyword);
@@ -127,7 +131,7 @@ export const useFetchItem = (
     }
     setItems((prev) => [...prev, ...(data?.item ?? [])]);
     setPage((prevPage) => prevPage + 1);
-    if (data.item.length < 4) setHasMore(false);
+    if (data.item.length < ITEM_LOAD_THRESHOLD) setHasMore(false);
   }, [data]);
 
   const fetchItems = () => {
@@ -144,9 +148,9 @@ export const useListSectionData = (ref: RefObject<Element>) => {
   const { items, fetchItems, hasMore, page, status } = useFetchItem(
     window.location.pathname.replace(/\//g, ''),
     keyword,
-    areaMap.find((a) => a.name === area)?.code ?? '1',
+    areaMap.find((a) => a.name === area)?.code ?? DEFAULT_AREA_CODE,
     typeMap.find((t) => t.page === window.location.pathname.replace(/\//g, ''))
-      ?.id ?? '15',
+      ?.id ?? DEFAULT_TYPE_ID,
   );
 
   useInfiniteScroll(ref, fetchItems, hasMore);
