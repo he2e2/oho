@@ -2,12 +2,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import path from 'path';
 
 export default defineConfig({
   plugins: [
     react(),
-    tsconfigPaths(),
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
@@ -68,5 +67,14 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    hmr: true,
+  },
+  build: {
+    outDir: 'dist',
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
   },
 });

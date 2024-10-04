@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { Layout } from '@/components/layout';
-import { MainPage, ListPage, DetailPage, MyPage } from '@/pages';
+import { MainPage, ListPage, DetailPage, MyPage, ErrorPage } from '@/pages';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +17,7 @@ const router = createBrowserRouter([
       { path: '/tour', element: <ListPage /> },
       { path: '/detail/:id', element: <DetailPage /> },
       { path: '/my', element: <MyPage /> },
+      { path: '*', element: <ErrorPage /> },
     ],
   },
 ]);
