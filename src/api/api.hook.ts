@@ -41,7 +41,7 @@ export const useDetailData = (
   enabled: boolean = false,
 ) =>
   useQuery({
-    queryKey: ['/oho/detailCommon1', contentId, contentTypeId],
+    queryKey: ['/oho/detailIntro1', contentId, contentTypeId],
     queryFn: () => getDetailData(contentId, contentTypeId),
     enabled,
   });
@@ -66,7 +66,7 @@ export const useSearchParamsState = () => {
 
   useEffect(() => {
     if (area === '') return;
-    if (keyword === '') setKeyword('서울');
+    if (keyword === '') setKeyword(area);
   }, [area, keyword]);
 
   return { keyword, setKeyword, area, setArea, type };
@@ -123,13 +123,12 @@ export const useFetchItem = (
 
   useEffect(() => {
     if (data?.item === undefined) {
+      setHasMore(false);
       return;
     }
     setItems((prev) => [...prev, ...(data?.item ?? [])]);
-    if (data?.item !== undefined) {
-      setPage((prevPage) => prevPage + 1);
-      if (data.item.length < 4) setHasMore(false);
-    }
+    setPage((prevPage) => prevPage + 1);
+    if (data.item.length < 4) setHasMore(false);
   }, [data]);
 
   const fetchItems = () => {
