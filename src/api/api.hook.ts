@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect, type RefObject } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { getCommonData, getDetailData, getSearchKeywordData } from './api';
 import type { KeywordItem } from './api.dto';
@@ -9,6 +9,8 @@ import { areaMap, typeMap } from '@/utils';
 const DEFAULT_AREA_CODE = '1';
 const DEFAULT_TYPE_ID = '15';
 const ITEM_LOAD_THRESHOLD = 4;
+
+const getPathnameKey = (pathname: string) => pathname.replace(/\//g, '');
 
 export const useSearchData = (
   pathname: string,
@@ -51,8 +53,7 @@ export const useDetailData = (
   });
 
 export const useSearchParamsState = () => {
-  const location = useLocation();
-  const path = location.pathname.replace(/\//g, '');
+  const path = getPathnameKey(window.location.pathname);
   const type = typeMap.find((t) => t.page === path)?.id;
   const [searchParams] = useSearchParams();
 
@@ -66,7 +67,7 @@ export const useSearchParamsState = () => {
 
     setKeyword(newCard != null ? newCard : newKeyword);
     setArea(areaMap.find((a) => a.code === newAreaCode)?.name ?? '서울');
-  }, [location.pathname, searchParams]);
+  }, [window.location.pathname, searchParams]);
 
   useEffect(() => {
     if (area === '') return;
@@ -146,10 +147,10 @@ export const useListSectionData = (ref: RefObject<Element>) => {
   const { keyword, setKeyword, area, setArea, type } = useSearchParamsState();
 
   const { items, fetchItems, hasMore, page, status } = useFetchItem(
-    window.location.pathname.replace(/\//g, ''),
+    getPathnameKey(window.location.pathname),
     keyword,
     areaMap.find((a) => a.name === area)?.code ?? DEFAULT_AREA_CODE,
-    typeMap.find((t) => t.page === window.location.pathname.replace(/\//g, ''))
+    typeMap.find((t) => t.page === getPathnameKey(window.location.pathname))
       ?.id ?? DEFAULT_TYPE_ID,
   );
 
