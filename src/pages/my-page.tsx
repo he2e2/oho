@@ -17,7 +17,7 @@ function LikeList({ type }: { type: string }) {
 
   return (
     <styles.likeList>
-      <h3>내가 찜한 {type} 목록</h3>
+      <h2>내가 찜한 {type} 목록</h2>
       <div className='cardsWrapper'>
         <div className='cards'>
           {list.length === 0 ? (
@@ -28,7 +28,9 @@ function LikeList({ type }: { type: string }) {
                 key={item.contentid}
                 name={item.title}
                 addr={item.addr1}
-                imageUrl={item.firstimage}
+                imageUrl={
+                  item.firstimage === '' ? '/no-image.png' : item.firstimage
+                }
                 contentid={item.contentid}
               />
             ))
@@ -47,14 +49,6 @@ const styles = {
     flex-direction: column;
     padding: 8rem 0.5rem;
     gap: 6rem;
-
-    h2 {
-      color: #000;
-      font-size: 2.5rem;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-    }
   `,
 
   likeList: styled.section`
@@ -67,7 +61,7 @@ const styles = {
       gap: 1rem;
     }
 
-    h3 {
+    h2 {
       color: #000;
       font-size: 1.875rem;
       font-style: normal;

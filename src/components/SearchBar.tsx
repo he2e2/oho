@@ -151,6 +151,7 @@ function InputBar({
       <button
         type='button'
         className='searchButton'
+        aria-label='Search'
         onClick={() => {
           if (handleSearch) handleSearch(type, value);
         }}
