@@ -27,6 +27,7 @@ const styles = {
       props.$type === 'button' ? 'none' : '1px solid rgba(59, 45, 181, 0.11)'};
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     span {
       color: ${(props) => (props.$type === 'button' ? '#fff' : '#3B2DB5')};
