@@ -150,6 +150,7 @@ function InputBar({
       />
       <button
         type='button'
+        className='searchButton'
         onClick={() => {
           if (handleSearch) handleSearch(type, value);
         }}

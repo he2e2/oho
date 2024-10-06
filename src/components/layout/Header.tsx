@@ -5,7 +5,7 @@ export function Header() {
   const location = useLocation();
   return (
     <styles.wrapper>
-      <Link to={'/'}>
+      <Link to={'/'} aria-label='Home'>
         <styles.logo $pathname={location.pathname} />
       </Link>
       <styles.navBar>
