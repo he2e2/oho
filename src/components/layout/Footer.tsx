@@ -20,7 +20,7 @@ const styles = {
     background: rgba(217, 217, 217, 0.5);
 
     p {
-      color: #a3a3a3;
+      color: #4a4a4a;
       font-feature-settings:
         'liga' off,
         'clig' off;

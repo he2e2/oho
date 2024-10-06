@@ -84,7 +84,9 @@ function ListSection() {
         </styles.searchSection>
         <styles.listSection>
           {items.length === 0 && status !== 'pending' ? (
-            <p>검색 결과가 존재하지 않습니다.</p>
+            <li>
+              <p>검색 결과가 존재하지 않습니다.</p>
+            </li>
           ) : (
             items.map((item) => {
               return (
@@ -362,7 +364,7 @@ const styles = {
     }
 
     .addr {
-      color: rgba(0, 0, 0, 0.5);
+      color: #616161;
       font-size: 0.875rem;
       font-style: normal;
       font-weight: 400;
@@ -398,7 +400,7 @@ const styles = {
     }
   `,
 
-  loadingWrapper: styled.div`
+  loadingWrapper: styled.li`
     width: 100%;
     display: flex;
     justify-content: center;
