@@ -178,29 +178,6 @@ const styles = {
     }
   `,
 
-  prev: styled.div`
-    width: 100%;
-    display: flex;
-    gap: 0.8rem;
-    align-items: center;
-    font-size: 1rem;
-
-    @media (max-width: 768px) {
-      font-size: 0.875rem;
-    }
-
-    .fa-chevron-left {
-      color: #505050;
-    }
-
-    span {
-      color: #000;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-    }
-  `,
-
   titleSection: styled.section`
     width: 100%;
     position: relative;
@@ -229,7 +206,7 @@ const styles = {
     }
 
     .addr {
-      color: rgba(0, 0, 0, 0.5);
+      color: #616161;
       font-size: 0.875rem;
       font-style: normal;
       font-weight: 400;
@@ -290,7 +267,7 @@ const styles = {
   `,
 
   cateItem: styled.span`
-    color: rgba(0, 0, 0, 0.5);
+    color: #616161;
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;

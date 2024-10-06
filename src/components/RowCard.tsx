@@ -21,7 +21,7 @@ export function RowCard({
     >
       <styles.image src={imageUrl} alt='card-image' />
       <styles.contents>
-        <h4>{name}</h4>
+        <h3>{name}</h3>
         <span className='addr'>{addr}</span>
       </styles.contents>
     </styles.wrapper>
@@ -65,7 +65,7 @@ const styles = {
     line-height: normal;
     width: 10rem;
 
-    h4 {
+    h3 {
       color: #000;
       font-size: 1rem;
       font-weight: 700;
