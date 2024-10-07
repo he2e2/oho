@@ -127,12 +127,14 @@ export const useFetchItem = (
   }, [keyword, area]);
 
   useEffect(() => {
-    if (data?.item === undefined) {
+    if (typeof data === 'string') {
+      if (items.length !== 0) setHasMore(false);
       return;
     }
     setItems((prev) => [...prev, ...(data?.item ?? [])]);
     setPage((prevPage) => prevPage + 1);
-    if (data.item.length < ITEM_LOAD_THRESHOLD) setHasMore(false);
+    if (data !== undefined && data.item.length < ITEM_LOAD_THRESHOLD)
+      setHasMore(false);
   }, [data]);
 
   const fetchItems = () => {
