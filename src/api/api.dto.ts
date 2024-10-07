@@ -10,9 +10,11 @@ export interface GetSearchKeywordDataDTO {
   response: {
     header: string;
     body: {
-      items: {
-        item: KeywordItem[];
-      };
+      items:
+        | {
+            item: KeywordItem[];
+          }
+        | string;
     };
   };
 }
